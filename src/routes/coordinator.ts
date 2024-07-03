@@ -12,16 +12,7 @@ coordinator.get("/:id", async (c) => {
     throw new HTTPException(404, { message: "Coordinator not found" });
   }
 
-  return c.json({
-    id: foundCoordinator.id,
-    ic: foundCoordinator.ic,
-    name: foundCoordinator.name,
-    last_name: foundCoordinator.last_name,
-    entry_date: foundCoordinator.entry_date,
-    withdraw_date: foundCoordinator.withdraw_date,
-
-    user_id: foundCoordinator.user_id,
-  });
+  return c.json(foundCoordinator);
 });
 
 export default coordinator;

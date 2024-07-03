@@ -11,14 +11,7 @@ teacher.get("/:id", async (c) => {
     throw new HTTPException(404, { message: "Teacher not found" });
   }
 
-  return c.json({
-    id: foundTeacher.id,
-    ic: foundTeacher.ic,
-    name: foundTeacher.name,
-    last_name: foundTeacher.last_name,
-
-    user_id: foundTeacher.user_id,
-  });
+  return c.json(foundTeacher);
 });
 
 export default teacher;

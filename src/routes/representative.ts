@@ -12,14 +12,7 @@ representative.get("/:id", async (c) => {
     throw new HTTPException(404, { message: "Representative not found" });
   }
 
-  return c.json({
-    id: foundRepresentative.id,
-    ic: foundRepresentative.ic,
-    name: foundRepresentative.name,
-    last_name: foundRepresentative.last_name,
-
-    user_id: foundRepresentative.user_id,
-  });
+  return c.json(foundRepresentative);
 });
 
 export default representative;

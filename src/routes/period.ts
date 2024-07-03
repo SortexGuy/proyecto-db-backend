@@ -11,11 +11,7 @@ period.get("/:id", async (c) => {
     throw new HTTPException(404, { message: "period not found" });
   }
 
-  return c.json({
-    id: foundPeriod.id,
-    start: foundPeriod.start,
-    end: foundPeriod.end,
-  });
+  return c.json(foundPeriod);
 });
 
 export default period;

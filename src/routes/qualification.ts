@@ -12,16 +12,7 @@ qualification.get("/:id", async (c) => {
     throw new HTTPException(404, { message: "Qualification not found" });
   }
 
-  return c.json({
-    id: foundQualification.id,
-    value: foundQualification.value,
-    section: foundQualification.section,
-    lapse: foundQualification.lapse,
-
-    student_id: foundQualification.student_id,
-    period_id: foundQualification.period_id,
-    course_id: foundQualification.course_id,
-  });
+  return c.json(foundQualification);
 });
 
 export default qualification;

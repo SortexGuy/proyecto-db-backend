@@ -11,11 +11,7 @@ student.get("/:id", async (c) => {
     throw new HTTPException(404, { message: "Student not found" });
   }
 
-  return c.json({
-    id: foundStudent.id,
-    ic: foundStudent.ic,
-    name: foundStudent.name,
-  });
+  return c.json(foundStudent);
 });
 
 export default student;
