@@ -1,11 +1,19 @@
 import { Database } from "bun:sqlite";
 import { BunUserRepository } from "./repositories/userRepository";
+import { BunCourseRepository } from "./repositories/courseRepository";
+import { BunPeriodRepository } from "./repositories/periodRepository";
+import { BunQualificationRepository } from "./repositories/qualificationRepository";
 import { BunCoordinatorRepository } from "./repositories/coordinatorRepository";
+import { BunStudentRepository } from "./repositories/studentRepository";
 import { BunTeacherRepository } from "./repositories/teacherRepository";
 import { BunRepresentativeRepository } from "./repositories/representativeRepository";
 
 export const db = new Database("./database/db.sqlite");
 export const userRepository = new BunUserRepository(db);
+export const courseRepository = new BunCourseRepository(db);
+export const periodRepository = new BunPeriodRepository(db);
+export const qualificationRepository = new BunQualificationRepository(db);
 export const coordinatorRepository = new BunCoordinatorRepository(db);
+export const studentRepository = new BunStudentRepository(db);
 export const teacherRepository = new BunTeacherRepository(db);
 export const representativeRepository = new BunRepresentativeRepository(db);

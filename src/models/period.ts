@@ -5,3 +5,5 @@ export const periodSchema = z.object({
   start: z.string().date(),
   end: z.string().date(),
 });
+
+export type Period = z.infer<typeof periodSchema>;
