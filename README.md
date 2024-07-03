@@ -18,4 +18,4 @@ To run the dev server:
 bun run dev
 ```
 
-open [localhost:3000](http://localhost:3000)
+Server starts on [localhost:3000](http://localhost:3000)
