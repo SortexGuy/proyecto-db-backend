@@ -1,5 +1,5 @@
-import { User } from "@/models/user";
+import { Student } from "@/models/student";
 
-export interface UserRepository {
-  getUserById(id: string): Promise<User | null>;
+export interface StudentRepository {
+  getStudentById(id: string): Promise<Student | null>;
 }

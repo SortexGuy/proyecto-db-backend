@@ -5,6 +5,7 @@ export const teacherSchema = z.object({
   ic: z.string(),
   name: z.string(),
   last_name: z.string(),
+
   user_id: z.number(),
 });
 
