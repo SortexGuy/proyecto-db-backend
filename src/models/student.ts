@@ -6,3 +6,5 @@ export const studentSchema = z.object({
   lastName: z.string(),
   ic: z.string(),
 });
+
+export type Student = z.infer<typeof studentSchema>;
