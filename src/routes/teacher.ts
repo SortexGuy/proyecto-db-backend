@@ -5,13 +5,13 @@ import { teacherRepository } from "../dependencies";
 const teacher = new Hono();
 
 teacher.get("/:id", async (c) => {
-  const id = c.req.param("id");
-  const foundTeacher = await teacherRepository.getTeacherByUserId(id);
-  if (!foundTeacher) {
-    throw new HTTPException(404, { message: "Teacher not found" });
-  }
+	const id = c.req.param("id");
+	const foundTeacher = await teacherRepository.getTeacherByUserId(id);
+	if (!foundTeacher) {
+		throw new HTTPException(404, { message: "Teacher not found" });
+	}
 
-  return c.json(foundTeacher);
+	return c.json(foundTeacher);
 });
 
 export default teacher;

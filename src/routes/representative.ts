@@ -5,14 +5,14 @@ import { representativeRepository } from "../dependencies";
 const representative = new Hono();
 
 representative.get("/:id", async (c) => {
-  const id = c.req.param("id");
-  const foundRepresentative =
-    await representativeRepository.getRepresentativeByUserId(id);
-  if (!foundRepresentative) {
-    throw new HTTPException(404, { message: "Representative not found" });
-  }
+	const id = c.req.param("id");
+	const foundRepresentative =
+		await representativeRepository.getRepresentativeByUserId(id);
+	if (!foundRepresentative) {
+		throw new HTTPException(404, { message: "Representative not found" });
+	}
 
-  return c.json(foundRepresentative);
+	return c.json(foundRepresentative);
 });
 
 export default representative;
