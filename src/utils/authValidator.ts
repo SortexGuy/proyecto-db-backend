@@ -33,7 +33,7 @@ export const authValidator = async <T extends UserRole>(
 
 	const parsedPayload = await z
 		.object({
-			sub: z.string(),
+			sub: z.number(),
 			exp: z.number(),
 		})
 		.parseAsync(decoded)
@@ -43,7 +43,7 @@ export const authValidator = async <T extends UserRole>(
 			});
 		});
 
-	const id = parsedPayload.sub;
+	const id = parsedPayload.sub.toString();
 
 	const user = await userRepository.getUserById(id);
 
