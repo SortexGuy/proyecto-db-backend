@@ -11,12 +11,7 @@ user.get("/:id", async (c) => {
     throw new HTTPException(404, { message: "User not found" });
   }
 
-  return c.json({
-    id: foundUser.id,
-    username: foundUser.username,
-    password: foundUser.password,
-    role: foundUser.role,
-  });
+  return c.json(foundUser);
 });
 
 export default user;

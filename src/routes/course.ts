@@ -11,11 +11,7 @@ course.get("/:id", async (c) => {
     throw new HTTPException(404, { message: "Course not found" });
   }
 
-  return c.json({
-    id: foundCourse.id,
-    name: foundCourse.name,
-    year: foundCourse.year,
-  });
+  return c.json(foundCourse);
 });
 
 export default course;
