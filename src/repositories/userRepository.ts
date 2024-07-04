@@ -23,4 +23,21 @@ export class BunUserRepository implements UserRepository {
       return null;
     }
   }
+
+  async getUserByUsername(username: string): Promise<User | null> {
+    try {
+      const query = this.db.query(
+        `SELECT * FROM user WHERE username = $username`,
+      );
+
+      const result = await query.get({
+        $username: username,
+      });
+
+      return userSchema.parse(result);
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
 }

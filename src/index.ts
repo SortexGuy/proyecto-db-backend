@@ -16,14 +16,14 @@ const app = new Hono();
 
 app.use("*", logger());
 app.route("/auth", auth);
-app.route("/user", user);
-app.route("/coordinator", coordinator);
-app.route("/teacher", teacher);
-app.route("/representative", representative);
-app.route("/student", student);
-app.route("/course", course);
-app.route("/qualification", qualification);
-app.route("/period", period);
+app.route("/users", user);
+app.route("/coordinators", coordinator);
+app.route("/teachers", teacher);
+app.route("/representatives", representative);
+app.route("/students", student);
+app.route("/courses", course);
+app.route("/qualifications", qualification);
+app.route("/periods", period);
 
 app.get("/", async (c) => {
   return c.text("Hello World!");
