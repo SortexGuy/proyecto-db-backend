@@ -3,41 +3,41 @@ import { UserRepository } from "@/models/repositories/user";
 import { User, userSchema } from "@/models/user";
 
 export class BunUserRepository implements UserRepository {
-  private db: Database;
+	private db: Database;
 
-  constructor(db: Database) {
-    this.db = db;
-  }
+	constructor(db: Database) {
+		this.db = db;
+	}
 
-  async getUserById(id: string): Promise<User | null> {
-    try {
-      const query = this.db.query(`SELECT * FROM user WHERE id = $id`);
+	async getUserById(id: string): Promise<User | null> {
+		try {
+			const query = this.db.query(`SELECT * FROM user WHERE id = $id`);
 
-      const result = await query.get({
-        $id: id,
-      });
+			const result = await query.get({
+				$id: id,
+			});
 
-      return userSchema.parse(result);
-    } catch (err) {
-      console.error(err);
-      return null;
-    }
-  }
+			return userSchema.parse(result);
+		} catch (err) {
+			console.error(err);
+			return null;
+		}
+	}
 
-  async getUserByUsername(username: string): Promise<User | null> {
-    try {
-      const query = this.db.query(
-        `SELECT * FROM user WHERE username = $username`,
-      );
+	async getUserByUsername(username: string): Promise<User | null> {
+		try {
+			const query = this.db.query(
+				`SELECT * FROM user WHERE username = $username`,
+			);
 
-      const result = await query.get({
-        $username: username,
-      });
+			const result = await query.get({
+				$username: username,
+			});
 
-      return userSchema.parse(result);
-    } catch (err) {
-      console.error(err);
-      return null;
-    }
-  }
+			return userSchema.parse(result);
+		} catch (err) {
+			console.error(err);
+			return null;
+		}
+	}
 }

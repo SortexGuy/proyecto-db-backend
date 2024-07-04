@@ -3,24 +3,24 @@ import { StudentRepository } from "@/models/repositories/student";
 import { Student, studentSchema } from "@/models/student";
 
 export class BunStudentRepository implements StudentRepository {
-  private db: Database;
+	private db: Database;
 
-  constructor(db: Database) {
-    this.db = db;
-  }
+	constructor(db: Database) {
+		this.db = db;
+	}
 
-  async getStudentById(id: string): Promise<Student | null> {
-    try {
-      const query = this.db.query(`SELECT * FROM student WHERE id = $id`);
+	async getStudentById(id: string): Promise<Student | null> {
+		try {
+			const query = this.db.query(`SELECT * FROM student WHERE id = $id`);
 
-      const result = await query.get({
-        $id: id,
-      });
+			const result = await query.get({
+				$id: id,
+			});
 
-      return studentSchema.parse(result);
-    } catch (err) {
-      console.error(err);
-      return null;
-    }
-  }
+			return studentSchema.parse(result);
+		} catch (err) {
+			console.error(err);
+			return null;
+		}
+	}
 }

@@ -26,23 +26,23 @@ app.route("/qualifications", qualification);
 app.route("/periods", period);
 
 app.get("/", async (c) => {
-  return c.text("Hello World!");
+	return c.text("Hello World!");
 });
 
 // Test validation step
 const listQuerySquema = z.object({
-  section: z.coerce.number(),
-  id_period: z.coerce.number(),
-  id_course: z.coerce.number(),
+	section: z.coerce.number(),
+	id_period: z.coerce.number(),
+	id_course: z.coerce.number(),
 });
 
 app.get("/list", zValidator("query", listQuerySquema), async (c) => {
-  const { section, id_period, id_course } = c.req.valid("query");
+	const { section, id_period, id_course } = c.req.valid("query");
 
-  return c.json({ section, id_period, id_course });
+	return c.json({ section, id_period, id_course });
 });
 
 export default {
-  port: 3000,
-  fetch: app.fetch,
+	port: 3000,
+	fetch: app.fetch,
 };
