@@ -1,8 +1,16 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { teacherRepository } from "../dependencies";
+import { userRepository } from "../dependencies";
+import { authValidator } from "@/utils/authValidator";
 
 const teacher = new Hono();
+
+teacher.get("/me", async (c) => {
+	const teacher = await authValidator(userRepository, c, "teacher");
+
+	return c.json(teacher);
+});
 
 teacher.get("/:id", async (c) => {
 	const id = c.req.param("id");

@@ -1,8 +1,20 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { representativeRepository } from "../dependencies";
+import { userRepository } from "../dependencies";
+import { authValidator } from "@/utils/authValidator";
 
 const representative = new Hono();
+
+representative.get("/me", async (c) => {
+	const representative = await authValidator(
+		userRepository,
+		c,
+		"representative",
+	);
+
+	return c.json(representative);
+});
 
 representative.get("/:id", async (c) => {
 	const id = c.req.param("id");
