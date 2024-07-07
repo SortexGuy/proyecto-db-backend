@@ -9,11 +9,11 @@ const teacher = new Hono();
 teacher.get("/me", async (c) => {
   const userTeacher = await authValidator(userRepository, c, "teacher");
 
-  const teacher = await teacherRepository.getTeacherByUserId(
+  const teacherData = await teacherRepository.getTeacherByUserId(
     userTeacher.id.toString()
   );
 
-  return c.json(teacher);
+  return c.json(teacherData);
 });
 
 teacher.get("/:id", async (c) => {

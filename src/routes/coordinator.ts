@@ -9,11 +9,11 @@ const coordinator = new Hono();
 coordinator.get("/me", async (c) => {
   const userCoordinator = await authValidator(userRepository, c, "coordinator");
 
-  const coodinator = await coordinatorRepository.getCoordinatorByUserId(
+  const coordinatorData = await coordinatorRepository.getCoordinatorByUserId(
     userCoordinator.id.toString()
   );
 
-  return c.json(coordinator);
+  return c.json(coordinatorData);
 });
 
 coordinator.get("/:id", async (c) => {

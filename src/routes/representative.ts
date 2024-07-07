@@ -13,12 +13,12 @@ representative.get("/me", async (c) => {
     "representative"
   );
 
-  const representative =
+  const representativeData =
     await representativeRepository.getRepresentativeByUserId(
       userRepresentative.id.toString()
     );
 
-  return c.json(representative);
+  return c.json(representativeData);
 });
 
 representative.get("/:id", async (c) => {
