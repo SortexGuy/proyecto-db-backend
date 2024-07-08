@@ -7,29 +7,29 @@ import { authValidator } from "@/utils/authValidator";
 const representative = new Hono();
 
 representative.get("/me", async (c) => {
-  const userRepresentative = await authValidator(
-    userRepository,
-    c,
-    "representative"
-  );
+	const userRepresentative = await authValidator(
+		userRepository,
+		c,
+		"representative",
+	);
 
-  const representativeData =
-    await representativeRepository.getRepresentativeByUserId(
-      userRepresentative.id.toString()
-    );
+	const representativeData =
+		await representativeRepository.getRepresentativeByUserId(
+			userRepresentative.id.toString(),
+		);
 
-  return c.json(representativeData);
+	return c.json(representativeData);
 });
 
 representative.get("/:id", async (c) => {
-  const id = c.req.param("id");
-  const foundRepresentative =
-    await representativeRepository.getRepresentativeByUserId(id);
-  if (!foundRepresentative) {
-    throw new HTTPException(404, { message: "Representative not found" });
-  }
+	const id = c.req.param("id");
+	const foundRepresentative =
+		await representativeRepository.getRepresentativeByUserId(id);
+	if (!foundRepresentative) {
+		throw new HTTPException(404, { message: "Representative not found" });
+	}
 
-  return c.json(foundRepresentative);
+	return c.json(foundRepresentative);
 });
 
 export default representative;
