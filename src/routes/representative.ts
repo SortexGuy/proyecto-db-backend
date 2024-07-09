@@ -32,4 +32,8 @@ representative.get("/:id", async (c) => {
 	return c.json(foundRepresentative);
 });
 
+representative.get("/:id/students", async (c) => {
+	// TODO: Implement this
+});
+
 export default representative;
