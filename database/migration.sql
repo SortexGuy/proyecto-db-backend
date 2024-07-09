@@ -63,8 +63,7 @@ CREATE TABLE IF NOT EXISTS qualification (
   lapse INTEGER NOT NULL,
 
   student_id INTEGER NOT NULL,
-  period_id INTEGER NOT NULL,
-  course_id INTEGER NOT NULL
+  charge_id INTEGER NOT NULL
 );
 
 --- Relationships
@@ -73,4 +72,12 @@ CREATE TABLE IF NOT EXISTS representative_student (
   student_id INTEGER NOT NULL,
 
   PRIMARY KEY (representative_id, student_id)
+);
+
+CREATE TABLE IF NOT EXISTS charge (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+  period_id INTEGER NOT NULL,
+  course_id INTEGER NOT NULL,
+  teacher_id INTEGER NOT NULL
 );
