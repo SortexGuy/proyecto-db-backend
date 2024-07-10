@@ -37,7 +37,7 @@ export class BunTeacherRepository implements TeacherRepository {
 				WHERE teacher_id = $id;
 			`);
 
-			const result = await query.get({
+			const result = query.all({
 				$id: id,
 			});
 
