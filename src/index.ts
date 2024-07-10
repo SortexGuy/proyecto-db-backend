@@ -21,6 +21,7 @@ app.use("*", cors());
 
 app.onError(async (error, c) => {
 	if (!(error instanceof HTTPException)) {
+		c.status(500);
 		return c.json({
 			error: {
 				status: 500,
@@ -30,6 +31,7 @@ app.onError(async (error, c) => {
 		});
 	}
 
+	c.status(error.status);
 	return c.json({
 		error: {
 			status: error.status,
