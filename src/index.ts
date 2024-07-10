@@ -12,10 +12,12 @@ import period from "./routes/period";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import { HTTPException } from "hono/http-exception";
+import { cors } from "hono/cors";
 
 const app = new Hono();
 
 app.use("*", logger());
+app.use("*", cors());
 
 app.onError(async (error, c) => {
 	if (!(error instanceof HTTPException)) {
