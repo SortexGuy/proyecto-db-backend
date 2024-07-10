@@ -1,3 +1,5 @@
+PRAGMA foreign_keys = ON;
+
 -- User tables
 CREATE TABLE IF NOT EXISTS user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -12,7 +14,9 @@ CREATE TABLE IF NOT EXISTS teacher (
   name TEXT NOT NULL,
   last_name TEXT NOT NULL,
 
-  user_id INTEGER NOT NULL
+  user_id INTEGER NOT NULL,
+
+  FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
 CREATE TABLE IF NOT EXISTS representative (
@@ -21,7 +25,9 @@ CREATE TABLE IF NOT EXISTS representative (
   name TEXT NOT NULL,
   last_name TEXT NOT NULL,
 
-  user_id INTEGER NOT NULL
+  user_id INTEGER NOT NULL,
+
+  FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
 CREATE TABLE IF NOT EXISTS coordinator (
@@ -32,7 +38,9 @@ CREATE TABLE IF NOT EXISTS coordinator (
   entry_date DATE NOT NULL,
   withdraw_date DATE,
 
-  user_id INTEGER NOT NULL
+  user_id INTEGER NOT NULL,
+
+  FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
 -- Student tables
@@ -63,7 +71,10 @@ CREATE TABLE IF NOT EXISTS qualification (
   lapse INTEGER NOT NULL,
 
   student_id INTEGER NOT NULL,
-  charge_id INTEGER NOT NULL
+  charge_id INTEGER NOT NULL,
+  
+  FOREIGN KEY (student_id) REFERENCES student(id),
+  FOREIGN KEY (charge_id) REFERENCES charge(id)
 );
 
 --- Relationships
@@ -71,7 +82,9 @@ CREATE TABLE IF NOT EXISTS representative_student (
   representative_id INTEGER NOT NULL,
   student_id INTEGER NOT NULL,
 
-  PRIMARY KEY (representative_id, student_id)
+  PRIMARY KEY (representative_id, student_id),
+  FOREIGN KEY (representative_id) REFERENCES representative(id),
+  FOREIGN KEY (student_id) REFERENCES student(id)
 );
 
 CREATE TABLE IF NOT EXISTS charge (
@@ -79,5 +92,9 @@ CREATE TABLE IF NOT EXISTS charge (
 
   period_id INTEGER NOT NULL,
   course_id INTEGER NOT NULL,
-  teacher_id INTEGER NOT NULL
+  teacher_id INTEGER NOT NULL,
+
+  FOREIGN KEY (period_id) REFERENCES period(id),
+  FOREIGN KEY (course_id) REFERENCES course(id),
+  FOREIGN KEY (teacher_id) REFERENCES teacher(id)
 );
