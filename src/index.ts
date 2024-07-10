@@ -11,10 +11,32 @@ import qualification from "./routes/qualification";
 import period from "./routes/period";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
+import { HTTPException } from "hono/http-exception";
 
 const app = new Hono();
 
 app.use("*", logger());
+
+app.onError(async (error, c) => {
+	if (!(error instanceof HTTPException)) {
+		return c.json({
+			error: {
+				status: 500,
+				name: "Internal Server Error",
+				message: "Internal Server Error",
+			},
+		});
+	}
+
+	return c.json({
+		error: {
+			status: error.status,
+			name: error.name,
+			message: error.message,
+		},
+	});
+});
+
 app.route("/auth", auth);
 app.route("/users", user);
 app.route("/coordinators", coordinator);
