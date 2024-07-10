@@ -48,17 +48,4 @@ teacher.get("/:id/charges", async (c) => {
 	return c.json(foundCharges);
 });
 
-teacher.get("/:id/courses", async (c) => {
-	const id = c.req.param("id");
-	const foundTeacher = await teacherRepository.getTeacherByUserId(id);
-
-	if (!foundTeacher) {
-		throw new HTTPException(404, { message: "Teacher not found" });
-	}
-	// TODO: Get all academic charges of this teacher
-	// and then filter the courses only maybe on the current period
-
-	return c.json(foundTeacher);
-});
-
 export default teacher;
