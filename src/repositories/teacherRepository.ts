@@ -27,7 +27,7 @@ export class BunTeacherRepository implements TeacherRepository {
 		}
 	}
 
-	async getTeacherAcademicChargesByTeacherId(id: string): Promise<ExtCharge[] | null> {
+	async getTeacherAcademicChargesByTeacherId(id: string): Promise<ExtCharge[]> {
 		try {
 			const query = this.db.query(`
 				SELECT period.start_date, period.end_date, course.name, course.year
@@ -45,7 +45,7 @@ export class BunTeacherRepository implements TeacherRepository {
 			return extChargeSchema.array().parse(result);
 		} catch (err) {
 			console.error(err);
-			return null;
+			return [];
 		}
 	}
 }

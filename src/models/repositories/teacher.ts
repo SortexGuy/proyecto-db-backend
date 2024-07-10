@@ -3,5 +3,5 @@ import { ExtCharge } from "@/models/charge";
 
 export interface TeacherRepository {
 	getTeacherByUserId(id: string): Promise<Teacher | null>;
-	getTeacherAcademicChargesByTeacherId(id: string): Promise<ExtCharge[] | null>;
+	getTeacherAcademicChargesByTeacherId(id: string): Promise<ExtCharge[]>;
 }
