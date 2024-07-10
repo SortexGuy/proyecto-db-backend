@@ -22,6 +22,26 @@ type UserToInsert = {
 	  }
 );
 
+type StudentToInsert = {
+	$ic: string;
+	$name: string;
+	$last_name: string;
+};
+
+// TODO: Create types for these
+//
+// CREATE TABLE IF NOT EXISTS period (
+//   id INTEGER PRIMARY KEY AUTOINCREMENT,
+//   start_date DATE NOT NULL,
+//   end_date DATE NOT NULL
+// );
+//
+// CREATE TABLE IF NOT EXISTS course (
+//   id INTEGER PRIMARY KEY AUTOINCREMENT,
+//   name TEXT NOT NULL,
+//   year INTEGER NOT NULL
+// );
+
 const seed = async () => {
 	const insertUser = db.query(
 		`INSERT INTO user (username, password, role) VALUES ($username, $password, $role);`,
@@ -37,6 +57,14 @@ const seed = async () => {
 
 	const insertTeacher = db.prepare(
 		`INSERT INTO teacher (user_id, ic, name, last_name) VALUES ($user_id, $ic, $name, $last_name);`,
+	);
+
+	const insertStudent = db.prepare(
+		`INSERT INTO student (ic, name, last_name) VALUES ($ic, $name, $last_name);`,
+	);
+
+	const insertRepresentativeStudent = db.prepare(
+		`INSERT INTO representative_student (representative_id, student_id) VALUES ($representative_id, $student_id);`,
 	);
 
 	const insertUserTransaction = db.transaction((users) => {
@@ -81,6 +109,34 @@ const seed = async () => {
 
 		return users.length;
 	});
+
+	const insertStudentTransaction = db.transaction((students) => {
+		const studentValues = students as StudentToInsert[];
+
+		for (const student of studentValues) {
+			const insertedStudent = insertStudent.run({
+				$ic: student.$ic,
+				$name: student.$name,
+				$last_name: student.$last_name,
+			});
+		}
+
+		return students.length;
+	});
+
+	const insertRepStudentTransaction = db.transaction((repStudentRelations) => {
+		const relationsValues = repStudentRelations as {$rep_id: number, $student_id: number}[];
+
+		for (const relationship of relationsValues) {
+			const insertedRelationships = insertRepresentativeStudent.run({
+				$representative_id: relationship.$rep_id,
+				$student_id: relationship.$student_id,
+			});
+		}
+
+		return repStudentRelations.length;
+	});
+
 
 	const coordinators: UserToInsert[] = [
 		{
@@ -147,113 +203,165 @@ const seed = async () => {
 
 	const teachers: UserToInsert[] = [
 		{
-			$username: "tbraunston5",
-			$password: "tbraunston5",
-			$ic: "v18680205",
-			$name: "Thor",
-			$last_name: "Braunston",
+			$username: "rrackstraw0",
+			$password: "rrackstraw0",
+			$ic: "v25198522",
+			$name: "Rikki",
+			$last_name: "Rackstraw",
 			$role: "teacher",
 		},
 		{
-			$username: "jwilliams7",
-			$password: "jwilliams7",
-			$ic: "v18010226",
-			$name: "John",
-			$last_name: "Williams",
+			$username: "cstonehewer1",
+			$password: "cstonehewer1",
+			$ic: "v25949689",
+			$name: "Cayla",
+			$last_name: "Stonehewer",
 			$role: "teacher",
 		},
 		{
-			$username: "lsmith3",
-			$password: "lsmith3",
-			$ic: "v18010227",
-			$name: "Linda",
-			$last_name: "Smith",
+			$username: "kkemet2",
+			$password: "kkemet2",
+			$ic: "v25030179",
+			$name: "Katinka",
+			$last_name: "Kemet",
 			$role: "teacher",
 		},
 		{
-			$username: "mrodriguez9",
-			$password: "mrodriguez9",
-			$ic: "v18010228",
-			$name: "Maria",
-			$last_name: "Rodriguez",
+			$username: "bcorzor3",
+			$password: "bcorzor3",
+			$ic: "v25643520",
+			$name: "Blancha",
+			$last_name: "Corzor",
 			$role: "teacher",
 		},
 		{
-			$username: "dlee4",
-			$password: "dlee4",
-			$ic: "v18010229",
-			$name: "David",
-			$last_name: "Lee",
+			$username: "llivsey4",
+			$password: "llivsey4",
+			$ic: "v25599739",
+			$name: "Lida",
+			$last_name: "Livsey",
 			$role: "teacher",
 		},
 		{
-			$username: "rlopez2",
-			$password: "rlopez2",
-			$ic: "v18010230",
-			$name: "Rosa",
-			$last_name: "Lopez",
+			$username: "mconnachan5",
+			$password: "mconnachan5",
+			$ic: "v25730515",
+			$name: "Monty",
+			$last_name: "Connachan",
 			$role: "teacher",
 		},
 	];
 	const representatives: UserToInsert[] = [
 		{
-			$username: "tbraunston6",
-			$password: "tbraunston6",
-			$ic: "v18079226",
-			$name: "Tina",
-			$last_name: "Braunston",
+			$username: "adowning0",
+			$password: "adowning0",
+			$ic: "v23111312",
+			$name: "Ashlie",
+			$last_name: "Downing",
 			$role: "representative",
 		},
 		{
-			$username: "jwilliams8",
-			$password: "jwilliams8",
-			$ic: "v18910248",
-			$name: "James",
-			$last_name: "Williams",
+			$username: "bfeirn1",
+			$password: "bfeirn1",
+			$ic: "v23277486",
+			$name: "Bethany",
+			$last_name: "Feirn",
 			$role: "representative",
 		},
 		{
-			$username: "lsmith4",
-			$password: "lsmith4",
-			$ic: "v18014234",
-			$name: "Laura",
-			$last_name: "Smith",
+			$username: "estilliard2",
+			$password: "estilliard2",
+			$ic: "v23352216",
+			$name: "Etty",
+			$last_name: "Stilliard",
 			$role: "representative",
 		},
 		{
-			$username: "mrodriguez1",
-			$password: "mrodriguez1",
-			$ic: "v17014221",
-			$name: "Miguel",
-			$last_name: "Rodriguez",
+			$username: "mtenbroek3",
+			$password: "mtenbroek3",
+			$ic: "v23035813",
+			$name: "Marika",
+			$last_name: "Ten Broek",
 			$role: "representative",
 		},
 		{
-			$username: "dlee5",
-			$password: "dlee5",
-			$ic: "v18719225",
-			$name: "Diana",
-			$last_name: "Lee",
+			$username: "kmccurdy4",
+			$password: "kmccurdy4",
+			$ic: "v23103350",
+			$name: "Kiele",
+			$last_name: "McCurdy",
 			$role: "representative",
 		},
 		{
-			$username: "rlopez3",
-			$password: "rlopez3",
-			$ic: "v22034933",
-			$name: "Rafael",
-			$last_name: "Lopez",
+			$username: "mchidgey5",
+			$password: "mchidgey5",
+			$ic: "v23579305",
+			$name: "Myrah",
+			$last_name: "Chidgey",
 			$role: "representative",
 		},
+	];
+
+	const students: StudentToInsert[] = [
+		{
+			$ic: "v31852753",
+			$name: "Arvy",
+			$last_name: "Goncaves",
+		},
+		{
+			$ic: "v31673789",
+			$name: "Yancey",
+			$last_name: "Whitworth",
+		},
+		{
+			$ic: "v31386081",
+			$name: "Rosalyn",
+			$last_name: "Wansbury",
+		},
+		{
+			$ic: "v31449913",
+			$name: "Gabriel",
+			$last_name: "Bernolet",
+		},
+		{
+			$ic: "v31712664",
+			$name: "Stormi",
+			$last_name: "Teanby",
+		},
+		{
+			$ic: "v31478641",
+			$name: "Forrester",
+			$last_name: "Donoghue",
+		},
+	];
+
+	const repStudentRelations: {$rep_id: number, $student_id: number}[] = [
+		{$rep_id: 1, $student_id: 1},
+		{$rep_id: 2, $student_id: 1},
+		{$rep_id: 2, $student_id: 2},
+		{$rep_id: 3, $student_id: 2},
+		{$rep_id: 3, $student_id: 3},
+		{$rep_id: 4, $student_id: 3},
+		{$rep_id: 4, $student_id: 4},
+		{$rep_id: 5, $student_id: 4},
+		{$rep_id: 5, $student_id: 5},
+		{$rep_id: 6, $student_id: 5},
+		{$rep_id: 6, $student_id: 6},
+		{$rep_id: 1, $student_id: 6},
 	];
 
 	const coordinatorsResult = insertUserTransaction(coordinators);
 	const teachersResult = insertUserTransaction(teachers);
 	const representativesResult = insertUserTransaction(representatives);
+	const studentsResult = insertStudentTransaction(students);
+	const repStudentRelationsResult = insertRepStudentTransaction(repStudentRelations);
 
 	console.log("Inserted:");
 	console.log(`${coordinatorsResult} coordinators`);
 	console.log(`${teachersResult} teachers`);
 	console.log(`${representativesResult} representatives`);
+	console.log(`${studentsResult} students`);
+	console.log(`${repStudentRelationsResult} representative-student relationships`);
 };
 
 seed()

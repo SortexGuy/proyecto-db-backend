@@ -21,6 +21,30 @@ representative.get("/me", async (c) => {
 	return c.json(representativeData);
 });
 
+representative.get("/me/students", async (c) => {
+	const userRepresentative = await authValidator(
+		userRepository,
+		c,
+		"representative",
+	);
+
+	const representativeData =
+		await representativeRepository.getRepresentativeByUserId(
+			userRepresentative.id.toString(),
+		);
+
+	if (!representativeData) {
+		throw new HTTPException(403, { message: "Unauthorized" });
+	}
+
+	const studentsData =
+		await representativeRepository.getStudentsByRepresentativeId(
+			representativeData.id.toString(),
+		);
+
+	return c.json(studentsData);
+});
+
 representative.get("/:id", async (c) => {
 	const id = c.req.param("id");
 	const foundRepresentative =

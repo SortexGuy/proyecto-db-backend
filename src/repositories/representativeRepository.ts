@@ -1,6 +1,11 @@
 import { Database } from "bun:sqlite";
 import { Representative, representativeSchema } from "@/models/representative";
 import { RepresentativeRepository } from "@/models/repositories/representative";
+import {
+	RepExtendedStudent,
+	repExtendedStudentSchema,
+} from "@/models/representativeStudent";
+import { Student, studentSchema } from "@/models/student";
 
 export class BunRepresentativeRepository implements RepresentativeRepository {
 	private db: Database;
@@ -23,6 +28,27 @@ export class BunRepresentativeRepository implements RepresentativeRepository {
 		} catch (err) {
 			console.error(err);
 			return null;
+		}
+	}
+
+	async getStudentsByRepresentativeId(id: string): Promise<Student[]> {
+		try {
+			const query = this.db.query(`
+				SELECT student.id, student.ic, student.name, student.last_name
+					FROM representative_student AS rel
+					INNER JOIN student ON rel.student_id = student.id
+				WHERE representative_id = $id;
+			`);
+
+			const result = query.all({
+				$id: id,
+			});
+
+			console.log(result);
+			return studentSchema.array().parse(result);
+		} catch (err) {
+			console.error(err);
+			return [];
 		}
 	}
 }
