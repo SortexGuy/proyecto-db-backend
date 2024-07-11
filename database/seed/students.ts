@@ -4,17 +4,21 @@ type StudentToInsert = {
 	$ic: string;
 	$name: string;
 	$last_name: string;
+	$current_year: number;
+	$status: string;
 };
 
 export async function insertStudentsCallback(
 	db: Database,
 ): Promise<{ studentsResult: number; repStudentRelationsResult: number }> {
 	const insertStudent = db.prepare(
-		`INSERT INTO student (ic, name, last_name) VALUES ($ic, $name, $last_name);`,
+		`INSERT INTO student (ic, name, last_name, current_year, status)
+			VALUES ($ic, $name, $last_name, $current_year, $status);`,
 	);
 
 	const insertRepresentativeStudent = db.prepare(
-		`INSERT INTO representative_student (representative_id, student_id) VALUES ($representative_id, $student_id);`,
+		`INSERT INTO representative_student (representative_id, student_id)
+			VALUES ($representative_id, $student_id);`,
 	);
 
 	const insertStudentTransaction = db.transaction((students) => {
@@ -52,31 +56,43 @@ export async function insertStudentsCallback(
 			$ic: "v31852753",
 			$name: "Arvy",
 			$last_name: "Goncaves",
+			$current_year: 1,
+			$status: "active",
 		},
 		{
 			$ic: "v31673789",
 			$name: "Yancey",
 			$last_name: "Whitworth",
+			$current_year: 1,
+			$status: "active",
 		},
 		{
 			$ic: "v31386081",
 			$name: "Rosalyn",
 			$last_name: "Wansbury",
+			$current_year: 1,
+			$status: "active",
 		},
 		{
 			$ic: "v31449913",
 			$name: "Gabriel",
 			$last_name: "Bernolet",
+			$current_year: 2,
+			$status: "active",
 		},
 		{
 			$ic: "v31712664",
 			$name: "Stormi",
 			$last_name: "Teanby",
+			$current_year: 3,
+			$status: "active",
 		},
 		{
 			$ic: "v31478641",
 			$name: "Forrester",
 			$last_name: "Donoghue",
+			$current_year: 2,
+			$status: "active",
 		},
 	];
 

@@ -48,7 +48,9 @@ CREATE TABLE IF NOT EXISTS student (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   ic TEXT NOT NULL,
   name TEXT NOT NULL,
-  last_name TEXT NOT NULL
+  last_name TEXT NOT NULL,
+  current_year INTEGER NOT NULL,
+  status TEXT NOT NULL
 );
 
 -- Course tables
