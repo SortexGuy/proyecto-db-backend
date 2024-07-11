@@ -108,7 +108,7 @@ export async function insertQualificationsCallback(db: Database): Promise<{
 	const periods: PeriodToInsert[] = [
 		{ $start_date: "2021-10-07", $end_date: "2022-06-28" },
 		{ $start_date: "2022-10-05", $end_date: "2023-06-26" },
-		{ $start_date: "2023-10-12", $end_date: "2024-06-31" },
+		{ $start_date: "2023-10-12", $end_date: "2024-06-30" },
 	];
 
 	const courses: CourseToInsert[] = [
