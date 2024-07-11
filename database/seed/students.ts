@@ -29,6 +29,8 @@ export async function insertStudentsCallback(
 				$ic: student.$ic,
 				$name: student.$name,
 				$last_name: student.$last_name,
+				$current_year: student.$current_year,
+				$status: student.$status,
 			});
 		}
 
