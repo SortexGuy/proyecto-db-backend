@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const qualificationSchema = z.object({
-	id: z.string(),
+	id: z.number(),
 	value: z.number().min(1).max(20),
 	section: z.number().min(1).max(5),
 	lapse: z.number().min(1).max(3),

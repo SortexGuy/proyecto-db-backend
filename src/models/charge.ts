@@ -14,7 +14,7 @@ export const extChargeSchema = z.object({
 	start_date: z.string().date(),
 	end_date: z.string().date(),
 	course_name: z.string(),
-	course_year: z.number(),
+	course_year: z.number().min(1).max(6),
 });
 
 export type ExtCharge = z.infer<typeof extChargeSchema>;
