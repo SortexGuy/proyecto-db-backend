@@ -1,28 +1,17 @@
 import { Database } from "bun:sqlite";
-import { insertUsersCallback } from "./seed/user";
+import { insertUsersCallback } from "./seed/users";
 import { insertStudentsCallback } from "./seed/students";
+import { insertQualificationsCallback } from "./seed/qualifications";
 
 const db = new Database("./database/db.sqlite");
-
-// TODO: Create types for these
-//
-// CREATE TABLE IF NOT EXISTS period (
-//   id INTEGER PRIMARY KEY AUTOINCREMENT,
-//   start_date DATE NOT NULL,
-//   end_date DATE NOT NULL
-// );
-//
-// CREATE TABLE IF NOT EXISTS course (
-//   id INTEGER PRIMARY KEY AUTOINCREMENT,
-//   name TEXT NOT NULL,
-//   year INTEGER NOT NULL
-// );
 
 const seed = async () => {
 	const { coordinatorsResult, teachersResult, representativesResult } =
 		await insertUsersCallback(db);
 	const { studentsResult, repStudentRelationsResult } =
 		await insertStudentsCallback(db);
+	const { periodResults, courseResults, chargeResults, qualificationResults } =
+		await insertQualificationsCallback(db);
 
 	console.log("Inserted:");
 	console.log(`${coordinatorsResult} coordinators`);
@@ -32,6 +21,10 @@ const seed = async () => {
 	console.log(
 		`${repStudentRelationsResult} representative-student relationships`,
 	);
+	console.log(`${periodResults} periods`);
+	console.log(`${courseResults} courses`);
+	console.log(`${chargeResults} charges`);
+	console.log(`${qualificationResults} qualifications`);
 };
 
 seed()
