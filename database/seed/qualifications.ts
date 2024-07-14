@@ -11,6 +11,7 @@ type CourseToInsert = {
 };
 
 type ChargeToInsert = {
+	$section: number;
 	$period_id: number;
 	$course_id: number;
 	$teacher_id: number;
@@ -18,7 +19,6 @@ type ChargeToInsert = {
 
 type QualificationToInsert = {
 	$value: number;
-	$section: number;
 	$lapse: number;
 	$student_id: number;
 	$charge_id: number;
@@ -39,13 +39,13 @@ export async function insertQualificationsCallback(db: Database): Promise<{
 	);
 
 	const insertCharge = db.prepare(
-		`INSERT INTO charge (period_id, course_id, teacher_id)
-			VALUES ($period_id, $course_id, $teacher_id);`,
+		`INSERT INTO charge (section, period_id, course_id, teacher_id)
+			VALUES ($section, $period_id, $course_id, $teacher_id);`,
 	);
 
 	const insertQualification = db.prepare(
-		`INSERT INTO qualification (value, section, lapse, student_id, charge_id)
-			VALUES ($value, $section, $lapse, $student_id, $charge_id);`,
+		`INSERT INTO qualification (value, lapse, student_id, charge_id)
+			VALUES ($value, $lapse, $student_id, $charge_id);`,
 	);
 
 	const insertPeriodTransaction = db.transaction((periods) => {
@@ -79,6 +79,7 @@ export async function insertQualificationsCallback(db: Database): Promise<{
 
 		for (const charge of chargeValues) {
 			const insertedCharge = insertCharge.run({
+				$section: charge.$section,
 				$period_id: charge.$period_id,
 				$course_id: charge.$course_id,
 				$teacher_id: charge.$teacher_id,
@@ -94,7 +95,6 @@ export async function insertQualificationsCallback(db: Database): Promise<{
 		for (const qualification of qualificationValues) {
 			const insertedQualification = insertQualification.run({
 				$value: qualification.$value,
-				$section: qualification.$section,
 				$lapse: qualification.$lapse,
 
 				$student_id: qualification.$student_id,
@@ -127,33 +127,33 @@ export async function insertQualificationsCallback(db: Database): Promise<{
 	];
 
 	const charges: ChargeToInsert[] = [
-		{ $period_id: 1, $course_id: 1, $teacher_id: 1 }, // year: 1
-		{ $period_id: 1, $course_id: 2, $teacher_id: 6 }, // year: 1
-		{ $period_id: 1, $course_id: 3, $teacher_id: 3 }, // year: 1
-		{ $period_id: 2, $course_id: 1, $teacher_id: 2 }, // year: 1
-		{ $period_id: 2, $course_id: 2, $teacher_id: 3 }, // year: 1
-		{ $period_id: 2, $course_id: 4, $teacher_id: 5 }, // year: 1
-		{ $period_id: 3, $course_id: 2, $teacher_id: 2 }, // year: 1
-		{ $period_id: 3, $course_id: 3, $teacher_id: 4 }, // year: 1
-		{ $period_id: 2, $course_id: 5, $teacher_id: 4 }, // year: 2
-		{ $period_id: 3, $course_id: 6, $teacher_id: 3 }, // year: 2
-		{ $period_id: 3, $course_id: 8, $teacher_id: 1 }, // year: 2
-		{ $period_id: 2, $course_id: 10, $teacher_id: 1 }, // year: 3
+		{ $section: 1, $period_id: 1, $course_id: 1, $teacher_id: 1 }, // year: 1
+		{ $section: 1, $period_id: 1, $course_id: 2, $teacher_id: 6 }, // year: 1
+		{ $section: 1, $period_id: 1, $course_id: 3, $teacher_id: 3 }, // year: 1
+		{ $section: 1, $period_id: 2, $course_id: 1, $teacher_id: 2 }, // year: 1
+		{ $section: 1, $period_id: 2, $course_id: 2, $teacher_id: 3 }, // year: 1
+		{ $section: 1, $period_id: 2, $course_id: 4, $teacher_id: 5 }, // year: 1
+		{ $section: 1, $period_id: 3, $course_id: 2, $teacher_id: 2 }, // year: 1
+		{ $section: 1, $period_id: 3, $course_id: 3, $teacher_id: 4 }, // year: 1
+		{ $section: 1, $period_id: 2, $course_id: 5, $teacher_id: 4 }, // year: 2
+		{ $section: 1, $period_id: 3, $course_id: 6, $teacher_id: 3 }, // year: 2
+		{ $section: 1, $period_id: 3, $course_id: 8, $teacher_id: 1 }, // year: 2
+		{ $section: 1, $period_id: 2, $course_id: 10, $teacher_id: 1 }, // year: 3
 	];
 
 	const qualifications: QualificationToInsert[] = [
-		{ $value: 19, $section: 1, $lapse: 1, $student_id: 1, $charge_id: 1 },
-		{ $value: 20, $section: 1, $lapse: 1, $student_id: 1, $charge_id: 2 },
-		{ $value: 12, $section: 1, $lapse: 1, $student_id: 1, $charge_id: 3 },
-		{ $value: 19, $section: 1, $lapse: 1, $student_id: 2, $charge_id: 4 },
-		{ $value: 18, $section: 1, $lapse: 1, $student_id: 2, $charge_id: 5 },
-		{ $value: 9, $section: 1, $lapse: 1, $student_id: 2, $charge_id: 6 },
-		{ $value: 15, $section: 1, $lapse: 1, $student_id: 3, $charge_id: 8 },
-		{ $value: 12, $section: 1, $lapse: 1, $student_id: 3, $charge_id: 7 },
-		{ $value: 8, $section: 1, $lapse: 1, $student_id: 4, $charge_id: 10 },
-		{ $value: 15, $section: 1, $lapse: 1, $student_id: 4, $charge_id: 11 },
-		{ $value: 1, $section: 1, $lapse: 1, $student_id: 5, $charge_id: 12 },
-		{ $value: 16, $section: 1, $lapse: 1, $student_id: 6, $charge_id: 9 },
+		{ $value: 19, $lapse: 1, $student_id: 1, $charge_id: 1 },
+		{ $value: 20, $lapse: 1, $student_id: 1, $charge_id: 2 },
+		{ $value: 12, $lapse: 1, $student_id: 1, $charge_id: 3 },
+		{ $value: 19, $lapse: 1, $student_id: 2, $charge_id: 4 },
+		{ $value: 18, $lapse: 1, $student_id: 2, $charge_id: 5 },
+		{ $value: 9, $lapse: 1, $student_id: 2, $charge_id: 6 },
+		{ $value: 15, $lapse: 1, $student_id: 3, $charge_id: 8 },
+		{ $value: 12, $lapse: 1, $student_id: 3, $charge_id: 7 },
+		{ $value: 8, $lapse: 1, $student_id: 4, $charge_id: 10 },
+		{ $value: 15, $lapse: 1, $student_id: 4, $charge_id: 11 },
+		{ $value: 1, $lapse: 1, $student_id: 5, $charge_id: 12 },
+		{ $value: 16, $lapse: 1, $student_id: 6, $charge_id: 9 },
 	];
 
 	const periodResults = await insertPeriodTransaction(periods);

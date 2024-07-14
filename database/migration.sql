@@ -66,10 +66,22 @@ CREATE TABLE IF NOT EXISTS course (
   year INTEGER NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS charge (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  section INTEGER NOT NULL,
+
+  period_id INTEGER NOT NULL,
+  course_id INTEGER NOT NULL,
+  teacher_id INTEGER NOT NULL,
+
+  FOREIGN KEY (period_id) REFERENCES period(id),
+  FOREIGN KEY (course_id) REFERENCES course(id),
+  FOREIGN KEY (teacher_id) REFERENCES teacher(id)
+);
+
 CREATE TABLE IF NOT EXISTS qualification (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   value INTEGER NOT NULL,
-  section INTEGER NOT NULL,
   lapse INTEGER NOT NULL,
 
   student_id INTEGER NOT NULL,
@@ -87,16 +99,4 @@ CREATE TABLE IF NOT EXISTS representative_student (
   PRIMARY KEY (representative_id, student_id),
   FOREIGN KEY (representative_id) REFERENCES representative(id),
   FOREIGN KEY (student_id) REFERENCES student(id)
-);
-
-CREATE TABLE IF NOT EXISTS charge (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-  period_id INTEGER NOT NULL,
-  course_id INTEGER NOT NULL,
-  teacher_id INTEGER NOT NULL,
-
-  FOREIGN KEY (period_id) REFERENCES period(id),
-  FOREIGN KEY (course_id) REFERENCES course(id),
-  FOREIGN KEY (teacher_id) REFERENCES teacher(id)
 );
