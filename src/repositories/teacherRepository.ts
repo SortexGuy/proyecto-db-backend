@@ -30,7 +30,8 @@ export class BunTeacherRepository implements TeacherRepository {
 	async getTeacherAcademicChargesByTeacherId(id: string): Promise<ExtCharge[]> {
 		try {
 			const query = this.db.query(`
-				SELECT period.start_date, period.end_date,
+				SELECT charge.section,
+				  period.start_date, period.end_date,
 				  course.name AS course_name, course.year AS course_year
 				FROM charge
 					INNER JOIN period ON charge.period_id = period.id
