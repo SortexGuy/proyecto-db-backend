@@ -14,6 +14,16 @@ student.get("/:id", async (c) => {
 	return c.json(foundStudent);
 });
 
+student.get("/", async (c) => {
+	const foundStudents = await studentRepository.getAllStudents();
+
+	if (!foundStudents) {
+		throw new HTTPException(404, { message: "Students not found" });
+	}
+
+	return c.json(foundStudents);
+});
+
 student.get("/:id/qualifications", async (c) => {
 	const id = c.req.param("id");
 	const foundStudent = await studentRepository.getStudentById(id);
@@ -21,7 +31,8 @@ student.get("/:id/qualifications", async (c) => {
 		throw new HTTPException(404, { message: "Student not found" });
 	}
 
-	const qualifications = await qualificationRepository.getQualificationsByStudentId(id);
+	const qualifications =
+		await qualificationRepository.getQualificationsByStudentId(id);
 	if (!qualifications) {
 		throw new HTTPException(404, { message: "Student not found" });
 	}

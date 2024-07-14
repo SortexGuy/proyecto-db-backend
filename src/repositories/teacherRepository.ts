@@ -27,6 +27,19 @@ export class BunTeacherRepository implements TeacherRepository {
 		}
 	}
 
+	async getAllTeachers(): Promise<Teacher[]> {
+		try {
+			const query = this.db.query(`SELECT * FROM teacher`);
+
+			const result = query.all();
+
+			return teacherSchema.array().parse(result);
+		} catch (err) {
+			console.error(err);
+			return [];
+		}
+	}
+
 	async getTeacherAcademicChargesByTeacherId(id: string): Promise<ExtCharge[]> {
 		try {
 			const query = this.db.query(`

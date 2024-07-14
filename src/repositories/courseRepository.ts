@@ -23,4 +23,17 @@ export class BunCourseRepository implements CourseRepository {
 			return null;
 		}
 	}
+
+	async getAllCourses(): Promise<Course[]> {
+		try {
+			const query = this.db.query(`SELECT * FROM course`);
+
+			const result = query.all();
+
+			return result.map((course) => courseSchema.parse(course));
+		} catch (err) {
+			console.error(err);
+			return [];
+		}
+	}
 }

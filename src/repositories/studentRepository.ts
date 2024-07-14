@@ -23,4 +23,17 @@ export class BunStudentRepository implements StudentRepository {
 			return null;
 		}
 	}
+
+	async getAllStudents(): Promise<Student[]> {
+		try {
+			const query = this.db.query(`SELECT * FROM student`);
+
+			const result = query.all();
+
+			return studentSchema.array().parse(result);
+		} catch (err) {
+			console.error(err);
+			return [];
+		}
+	}
 }

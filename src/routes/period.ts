@@ -14,4 +14,14 @@ period.get("/:id", async (c) => {
 	return c.json(foundPeriod);
 });
 
+period.get("/", async (c) => {
+	const foundPeriods = await periodRepository.getAllPeriods();
+
+	if (!foundPeriods) {
+		throw new HTTPException(404, { message: "periods not found" });
+	}
+
+	return c.json(foundPeriods);
+});
+
 export default period;

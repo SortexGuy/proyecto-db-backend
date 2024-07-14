@@ -27,6 +27,19 @@ export class BunRepresentativeRepository implements RepresentativeRepository {
 		}
 	}
 
+	async getAllRepresentatives(): Promise<Representative[]> {
+		try {
+			const query = this.db.query(`SELECT * FROM representative`);
+
+			const result = query.all();
+
+			return representativeSchema.array().parse(result);
+		} catch (err) {
+			console.error(err);
+			return [];
+		}
+	}
+
 	async getStudentsByRepresentativeId(id: string): Promise<Student[]> {
 		try {
 			const query = this.db.query(`

@@ -23,4 +23,17 @@ export class BunPeriodRepository implements PeriodRepository {
 			return null;
 		}
 	}
+
+	async getAllPeriods(): Promise<Period[]> {
+		try {
+			const query = this.db.query(`SELECT * FROM period`);
+
+			const result = query.all();
+
+			return periodSchema.array().parse(result);
+		} catch (err) {
+			console.error(err);
+			return [];
+		}
+	}
 }
