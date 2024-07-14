@@ -34,10 +34,15 @@ export class BunQualificationRepository implements QualificationRepository {
 		try {
 			const query = this.db.query(`
 				SELECT
-				  q.id, q.value, q.lapse,
+				  q.id, 
+          q.value, 
+          q.lapse,
 				  charge.section,
-				  p.start_date, p.end_date,
-				  c.name AS course_name, c.year AS course_year, charge.teacher_id
+				  p.start_date, 
+          p.end_date,
+				  c.name AS course_name, 
+          c.year AS course_year, 
+          charge.teacher_id,
 				  teacher.user_id AS teacher_id
 				FROM qualification AS q
 					INNER JOIN charge ON q.charge_id = charge.id
