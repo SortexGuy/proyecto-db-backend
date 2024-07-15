@@ -58,4 +58,22 @@ teacher.get("/:id/charges", async (c) => {
 	return c.json(foundCharges);
 });
 
+teacher.post("/:id/charges", async (c) => {
+	const userCoordinator = await authValidator(userRepository, c, "coordinator");
+
+	const id = c.req.param("id");
+	const foundTeacher = await teacherRepository.getTeacherByUserId(id);
+
+	if (!foundTeacher) {
+		throw new HTTPException(404, { message: "Teacher not found" });
+	}
+
+	const chargeData = await c.req.json();
+
+	chargeData.teacher_id = foundTeacher.id;
+	teacherRepository.asignNewCharge(chargeData);
+
+	return c.json({ message: "Charge added successfully" });
+});
+
 export default teacher;

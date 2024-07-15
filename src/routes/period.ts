@@ -1,6 +1,11 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { periodRepository } from "../dependencies";
+import {
+	coordinatorRepository,
+	periodRepository,
+	userRepository,
+} from "../dependencies";
+import { authValidator } from "@/utils/authValidator";
 
 const period = new Hono();
 
@@ -22,6 +27,16 @@ period.get("/", async (c) => {
 	}
 
 	return c.json(foundPeriods);
+});
+
+period.post("/", async (c) => {
+	const userCoordinator = await authValidator(userRepository, c, "coordinator");
+
+	const periodData = await c.req.json();
+
+	periodRepository.createPeriod(periodData);
+
+	return c.json({ message: "period created successfully" });
 });
 
 export default period;

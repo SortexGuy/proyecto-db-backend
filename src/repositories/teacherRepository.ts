@@ -1,8 +1,9 @@
 import { Database } from "bun:sqlite";
 import { TeacherRepository } from "@/models/repositories/teacher";
-import { ExtCharge, extChargeSchema } from "@/models/charge";
+import { ExtCharge, chargeSchema, extChargeSchema } from "@/models/charge";
 import { teacherSchema, Teacher } from "@/models/teacher";
 import { z } from "zod";
+import { HTTPException } from "hono/http-exception";
 
 export class BunTeacherRepository implements TeacherRepository {
 	private db: Database;
@@ -61,6 +62,25 @@ export class BunTeacherRepository implements TeacherRepository {
 		} catch (err) {
 			console.error(err);
 			return [];
+		}
+	}
+
+	asignNewCharge(charge: any): void {
+		try {
+			const chargeData = chargeSchema.omit({ id: true }).parse(charge);
+
+			const query = this.db
+				.query(`INSERT INTO charge (section, period_id, course_id, teacher_id)
+					VALUES ($section, $period_id, $course_id, $teacher_id)`);
+
+			query.run({
+				$section: chargeData.section,
+				$period_id: chargeData.period_id,
+				$course_id: chargeData.course_id,
+				$teacher_id: chargeData.teacher_id,
+			});
+		} catch (err) {
+			throw new HTTPException(500, { message: "Internal Server Error" });
 		}
 	}
 }
