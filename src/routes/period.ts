@@ -1,6 +1,12 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { periodRepository } from "../dependencies";
+import {
+	periodRepository,
+	userRepository,
+} from "../dependencies";
+import { authValidator } from "@/utils/authValidator";
+import { zValidator } from "@hono/zod-validator";
+import { newPeriodSchema } from "@/models/period";
 
 const period = new Hono();
 
@@ -22,6 +28,16 @@ period.get("/", async (c) => {
 	}
 
 	return c.json(foundPeriods);
+});
+
+period.post("/", zValidator("json", newPeriodSchema), async (c) => {
+	const userCoordinator = await authValidator(userRepository, c, "coordinator");
+
+	const periodData = c.req.valid("json");
+
+	periodRepository.createPeriod(periodData);
+
+	return c.json({ message: "period created successfully" });
 });
 
 export default period;
