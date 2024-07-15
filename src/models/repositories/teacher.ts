@@ -1,9 +1,9 @@
 import { Teacher } from "@/models/teacher";
-import { ExtCharge } from "@/models/charge";
+import { ExtCharge, NewCharge } from "@/models/charge";
 
 export interface TeacherRepository {
 	getTeacherByUserId(id: string): Promise<Teacher | null>;
 	getAllTeachers(): Promise<Teacher[]>;
 	getTeacherAcademicChargesByTeacherId(id: string): Promise<ExtCharge[]>;
-	asignNewCharge(charge: any): void;
+	asignNewCharge(charge: NewCharge): void;
 }

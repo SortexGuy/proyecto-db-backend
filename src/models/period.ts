@@ -7,3 +7,7 @@ export const periodSchema = z.object({
 });
 
 export type Period = z.infer<typeof periodSchema>;
+
+export const newPeriodSchema = periodSchema.omit({id: true});
+
+export type NewPeriod = z.infer<typeof newPeriodSchema>;

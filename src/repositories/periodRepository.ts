@@ -1,6 +1,6 @@
 import { Database } from "bun:sqlite";
 import { PeriodRepository } from "@/models/repositories/period";
-import { Period, periodSchema } from "@/models/period";
+import { NewPeriod, Period, periodSchema } from "@/models/period";
 import { HTTPException } from "hono/http-exception";
 
 export class BunPeriodRepository implements PeriodRepository {
@@ -38,18 +38,17 @@ export class BunPeriodRepository implements PeriodRepository {
 		}
 	}
 
-	createPeriod(period: any) {
+	createPeriod(period: NewPeriod) {
 		try {
-			const periodData = periodSchema.omit({ id: true }).parse(period);
-
 			const query = this.db.query(`INSERT INTO period (start_date, end_date)
 					VALUES ($start_date, $end_date)`);
 
 			query.run({
-				$start_date: periodData.start_date,
-				$end_date: periodData.end_date,
+				$start_date: period.start_date,
+				$end_date: period.end_date,
 			});
 		} catch (err) {
+			console.error(err);
 			throw new HTTPException(500, { message: "Internal Server Error" });
 		}
 	}

@@ -7,3 +7,7 @@ export const courseSchema = z.object({
 });
 
 export type Course = z.infer<typeof courseSchema>;
+
+export const newCourseSchema = courseSchema.omit({ id: true });
+
+export type NewCourse = z.infer<typeof newCourseSchema>;

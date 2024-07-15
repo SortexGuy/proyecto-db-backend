@@ -1,7 +1,7 @@
-import { Course } from "@/models/course";
+import { Course, NewCourse } from "@/models/course";
 
 export interface CourseRepository {
 	getCourseById(id: string): Promise<Course | null>;
 	getAllCourses(): Promise<Course[]>;
-	createCourse(course: any): void;
+	createCourse(course: NewCourse): void;
 }

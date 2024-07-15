@@ -1,7 +1,8 @@
 import { Database } from "bun:sqlite";
 import { CourseRepository } from "@/models/repositories/course";
-import { Course, courseSchema } from "@/models/course";
+import { Course, NewCourse, courseSchema } from "@/models/course";
 import { HTTPException } from "hono/http-exception";
+import { z } from "zod";
 
 export class BunCourseRepository implements CourseRepository {
 	private db: Database;
@@ -38,18 +39,17 @@ export class BunCourseRepository implements CourseRepository {
 		}
 	}
 
-	createCourse(course: any): void {
+	createCourse(course: NewCourse): void {
 		try {
-			const courseData = courseSchema.omit({ id: true }).parse(course);
-
 			const query = this.db.query(`INSERT INTO course (name, year)
-VALUES ($name, $year)`);
+					VALUES ($name, $year)`);
 
 			query.run({
-				$name: courseData.name,
-				$year: courseData.year,
+				$name: course.name,
+				$year: course.year,
 			});
 		} catch (err) {
+			console.error(err);
 			throw new HTTPException(500, { message: "Internal Server Error" });
 		}
 	}

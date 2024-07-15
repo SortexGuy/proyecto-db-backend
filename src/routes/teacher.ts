@@ -3,6 +3,9 @@ import { HTTPException } from "hono/http-exception";
 import { teacherRepository } from "../dependencies";
 import { userRepository } from "../dependencies";
 import { authValidator } from "@/utils/authValidator";
+import { zValidator } from "@hono/zod-validator";
+import { chargeSchema, extChargeSchema } from "@/models/charge";
+import { z } from "zod";
 
 const teacher = new Hono();
 
@@ -58,22 +61,25 @@ teacher.get("/:id/charges", async (c) => {
 	return c.json(foundCharges);
 });
 
-teacher.post("/:id/charges", async (c) => {
-	const userCoordinator = await authValidator(userRepository, c, "coordinator");
+const newChargeSchema = chargeSchema.omit({ id: true });
 
-	const id = c.req.param("id");
-	const foundTeacher = await teacherRepository.getTeacherByUserId(id);
+teacher.post("/:id/charges", zValidator("json", newChargeSchema), async (c) => {
+		const userCoordinator = await authValidator(userRepository, c, "coordinator");
 
-	if (!foundTeacher) {
-		throw new HTTPException(404, { message: "Teacher not found" });
-	}
+		const id = c.req.param("id");
+		const foundTeacher = await teacherRepository.getTeacherByUserId(id);
 
-	const chargeData = await c.req.json();
+		if (!foundTeacher) {
+			throw new HTTPException(404, { message: "Teacher not found" });
+		}
 
-	chargeData.teacher_id = foundTeacher.id;
-	teacherRepository.asignNewCharge(chargeData);
+		const chargeData = c.req.valid("json");
 
-	return c.json({ message: "Charge added successfully" });
-});
+		chargeData.teacher_id = foundTeacher.id;
+		teacherRepository.asignNewCharge(chargeData);
+
+		return c.json({ message: "Charge added successfully" });
+	},
+);
 
 export default teacher;

@@ -20,3 +20,7 @@ export const extChargeSchema = z.object({
 });
 
 export type ExtCharge = z.infer<typeof extChargeSchema>;
+
+export const newChargeSchema = chargeSchema.omit({ id: true });
+
+export type NewCharge = z.infer<typeof newChargeSchema>;
