@@ -24,3 +24,7 @@ export type ExtCharge = z.infer<typeof extChargeSchema>;
 export const newChargeSchema = chargeSchema.omit({ id: true });
 
 export type NewCharge = z.infer<typeof newChargeSchema>;
+
+export const updatedChargeSchema = chargeSchema.omit({ id: true }).partial();
+
+export type UpdatedCharge = z.infer<typeof updatedChargeSchema>;

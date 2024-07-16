@@ -17,3 +17,9 @@ export const newRepresentativeSchema = representativeSchema
 	.merge(newUserSchema.omit({ role: true }));
 
 export type NewRepresentative = z.infer<typeof newRepresentativeSchema>;
+
+export const updatedRepresentativeSchema = representativeSchema
+	.omit({ id: true, user_id: true })
+	.partial();
+
+export type UpdatedRepresentative = z.infer<typeof updatedRepresentativeSchema>;

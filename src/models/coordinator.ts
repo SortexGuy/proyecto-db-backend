@@ -20,3 +20,9 @@ export const newCoordinatorSchema = coordinatorSchema
 	.merge(newUserSchema.omit({ role: true }));
 
 export type NewCoordinator = z.infer<typeof newCoordinatorSchema>;
+
+export const updatedCoordinatorSchema = coordinatorSchema
+	.omit({ id: true, user_id: true })
+	.partial();
+
+export type UpdatedCoordinator = z.infer<typeof updatedCoordinatorSchema>;

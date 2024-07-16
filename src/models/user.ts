@@ -16,3 +16,9 @@ export type User = z.infer<typeof userSchema>;
 export const newUserSchema = userSchema.omit({ id: true });
 
 export type NewUser = z.infer<typeof newUserSchema>;
+
+export const updatedUserSchema = userSchema
+	.omit({ id: true, role: true })
+	.partial();
+
+export type UpdatedUser = z.infer<typeof updatedUserSchema>;

@@ -2,6 +2,7 @@ import { Database } from "bun:sqlite";
 import {
 	NewRepresentative,
 	Representative,
+	UpdatedRepresentative,
 	representativeSchema,
 } from "@/models/representative";
 import { RepresentativeRepository } from "@/models/repositories/representative";
@@ -135,6 +136,27 @@ export class BunRepresentativeRepository implements RepresentativeRepository {
 				$representative_id: repStudent.representative_id,
 				$student_id: repStudent.student_id,
 			});
+		} catch (err) {
+			console.error(err);
+			throw new HTTPException(500, { message: "Internal Server Error" });
+		}
+	}
+
+	updateRepresentative(
+		id: number,
+		representative: UpdatedRepresentative,
+	): void {
+		let queryStr = `UPDATE representative SET`;
+		let params: any = { $id: id };
+		for (const [key, value] of Object.entries(representative)) {
+			queryStr += ` ${key} = $${key},`;
+			params[`$${key}`] = value;
+		}
+		queryStr = queryStr.slice(0, -1) + ` WHERE id = $id`;
+
+		try {
+			const query = this.db.query(queryStr);
+			query.run(params);
 		} catch (err) {
 			console.error(err);
 			throw new HTTPException(500, { message: "Internal Server Error" });

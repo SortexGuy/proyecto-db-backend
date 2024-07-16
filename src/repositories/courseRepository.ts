@@ -1,6 +1,11 @@
 import { Database } from "bun:sqlite";
 import { CourseRepository } from "@/models/repositories/course";
-import { Course, NewCourse, courseSchema } from "@/models/course";
+import {
+	Course,
+	NewCourse,
+	UpdatedCourse,
+	courseSchema,
+} from "@/models/course";
 import { HTTPException } from "hono/http-exception";
 
 export class BunCourseRepository implements CourseRepository {
@@ -47,6 +52,24 @@ export class BunCourseRepository implements CourseRepository {
 				$name: course.name,
 				$year: course.year,
 			});
+		} catch (err) {
+			console.error(err);
+			throw new HTTPException(500, { message: "Internal Server Error" });
+		}
+	}
+
+	updateCourse(id: number, course: UpdatedCourse): void {
+		let queryStr = `UPDATE course SET`;
+		let params: any = { $id: id };
+		for (const [key, value] of Object.entries(course)) {
+			queryStr += ` ${key} = $${key},`;
+			params[`$${key}`] = value;
+		}
+		queryStr = queryStr.slice(0, -1) + ` WHERE id = $id`;
+
+		try {
+			const query = this.db.query(queryStr);
+			query.run(params);
 		} catch (err) {
 			console.error(err);
 			throw new HTTPException(500, { message: "Internal Server Error" });

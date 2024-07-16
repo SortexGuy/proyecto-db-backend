@@ -4,7 +4,10 @@ import { coordinatorRepository } from "../dependencies";
 import { userRepository } from "../dependencies";
 import { authValidator } from "@/utils/authValidator";
 import { zValidator } from "@hono/zod-validator";
-import { newCoordinatorSchema } from "@/models/coordinator";
+import {
+	newCoordinatorSchema,
+	updatedCoordinatorSchema,
+} from "@/models/coordinator";
 
 const coordinator = new Hono();
 
@@ -40,5 +43,18 @@ coordinator.post("/", zValidator("json", newCoordinatorSchema), async (c) => {
 
 	return c.json({ message: "coordinator created successfully" });
 });
+
+coordinator.put(
+	"/:id",
+	zValidator("json", updatedCoordinatorSchema),
+	async (c) => {
+		await authValidator(userRepository, c, "coordinator");
+		const id = c.req.param("id");
+		const coordinatorData = c.req.valid("json");
+
+		coordinatorRepository.updateCoordinator(parseInt(id), coordinatorData);
+		return c.json({ message: "coordinator updated successfully" });
+	},
+);
 
 export default coordinator;
