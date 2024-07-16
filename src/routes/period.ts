@@ -1,9 +1,6 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import {
-	periodRepository,
-	userRepository,
-} from "../dependencies";
+import { periodRepository, userRepository } from "../dependencies";
 import { authValidator } from "@/utils/authValidator";
 import { zValidator } from "@hono/zod-validator";
 import { newPeriodSchema } from "@/models/period";

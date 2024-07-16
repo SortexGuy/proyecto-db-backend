@@ -25,3 +25,7 @@ export const extQualificationSchema = z.object({
 });
 
 export type ExtQualification = z.infer<typeof extQualificationSchema>;
+
+export const newQualificationSchema = qualificationSchema.omit({ id: true });
+
+export type NewQualification = z.infer<typeof newQualificationSchema>;

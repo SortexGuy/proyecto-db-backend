@@ -28,14 +28,13 @@ course.get("/", async (c) => {
 });
 
 course.post("/", zValidator("json", newCourseSchema), async (c) => {
-		const userCoordinator = await authValidator(userRepository, c, "coordinator");
+	const userCoordinator = await authValidator(userRepository, c, "coordinator");
 
-		const courseData = c.req.valid("json");
+	const courseData = c.req.valid("json");
 
-		courseRepository.createCourse(courseData);
+	courseRepository.createCourse(courseData);
 
-		return c.json({ message: "course created successfully" });
-	},
-);
+	return c.json({ message: "course created successfully" });
+});
 
 export default course;
