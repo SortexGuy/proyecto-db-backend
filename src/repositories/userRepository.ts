@@ -1,6 +1,6 @@
 import { Database } from "bun:sqlite";
 import { UserRepository } from "@/models/repositories/user";
-import { NewUser, User, userSchema } from "@/models/user";
+import { NewUser, UpdatedUser, User, userSchema } from "@/models/user";
 import { HTTPException } from "hono/http-exception";
 
 export class BunUserRepository implements UserRepository {
@@ -53,6 +53,24 @@ export class BunUserRepository implements UserRepository {
 				$password: user.password,
 				$role: user.role,
 			});
+		} catch (err) {
+			console.error(err);
+			throw new HTTPException(500, { message: "Internal Server Error" });
+		}
+	}
+
+	updateUser(id: number, user: UpdatedUser): void {
+		let queryStr = `UPDATE user SET`;
+		let params: any = { $id: id };
+		for (const [key, value] of Object.entries(user)) {
+			queryStr += ` ${key} = $${key},`;
+			params[`$${key}`] = value;
+		}
+		queryStr = queryStr.slice(0, -1) + ` WHERE id = $id`;
+
+		try {
+			const query = this.db.query(queryStr);
+			query.run(params);
 		} catch (err) {
 			console.error(err);
 			throw new HTTPException(500, { message: "Internal Server Error" });
