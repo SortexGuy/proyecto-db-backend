@@ -2,7 +2,6 @@ import { Database } from "bun:sqlite";
 import { CourseRepository } from "@/models/repositories/course";
 import { Course, NewCourse, courseSchema } from "@/models/course";
 import { HTTPException } from "hono/http-exception";
-import { z } from "zod";
 
 export class BunCourseRepository implements CourseRepository {
 	private db: Database;

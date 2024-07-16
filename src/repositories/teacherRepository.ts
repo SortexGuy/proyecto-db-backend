@@ -75,20 +75,25 @@ export class BunTeacherRepository implements TeacherRepository {
 		}
 
 		try {
-			const query = this.db.query(`
+			const userQuery = this.db.query(`
 				INSERT INTO user (username, password, role)
 					VALUES ($username, $password, 'teacher');
+			`);
+			userQuery.run({
+				$username: teacher.username,
+				$password: teacher.password,
+			});
+
+			const query = this.db.query(`
 				INSERT INTO teacher (ic, name, last_name, user_id)
 					VALUES ($ic, $name, $last_name,
 						(SELECT id FROM user WHERE username = $username));
 			`);
-
 			query.run({
-				$username: teacher.username,
-				$password: teacher.password,
 				$ic: teacher.ic,
 				$name: teacher.name,
 				$last_name: teacher.last_name,
+				$username: teacher.username,
 			});
 		} catch (err) {
 			console.error(err);

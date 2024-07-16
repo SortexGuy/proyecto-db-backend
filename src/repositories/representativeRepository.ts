@@ -19,9 +19,9 @@ export class BunRepresentativeRepository implements RepresentativeRepository {
 
 	async getRepresentativeByUserId(id: string): Promise<Representative | null> {
 		try {
-			const query = this.db.query(
-				`SELECT * FROM representative WHERE user_id = $id`,
-			);
+			const query = this.db.query(`
+				SELECT * FROM representative WHERE user_id = $id
+			`);
 
 			const result = await query.get({
 				$id: id,
@@ -84,20 +84,25 @@ export class BunRepresentativeRepository implements RepresentativeRepository {
 		}
 
 		try {
-			const query = this.db.query(`
+			const userQuery = this.db.query(`
 				INSERT INTO user (username, password, role)
 					VALUES ($username, $password, 'representative');
-				INSERT INTO coordinator (ic, name, last_name, user_id)
+			`);
+			userQuery.run({
+				$username: representative.username,
+				$password: representative.password,
+			});
+
+			const query = this.db.query(`
+				INSERT INTO representative (ic, name, last_name, user_id)
 					VALUES ($ic, $name, $last_name,
 						(SELECT id FROM user WHERE username = $username));
 			`);
-
 			query.run({
-				$username: representative.username,
-				$password: representative.password,
 				$ic: representative.ic,
 				$name: representative.name,
 				$last_name: representative.last_name,
+				$username: representative.username,
 			});
 		} catch (err) {
 			console.error(err);

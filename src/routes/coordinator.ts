@@ -36,7 +36,7 @@ coordinator.post("/", zValidator("json", newCoordinatorSchema), async (c) => {
 	coordinatorData.password = Bun.password.hashSync(coordinatorData.password, {
 		algorithm: "bcrypt",
 	});
-	coordinatorRepository.aggregateCoordinator(coordinatorData);
+	await coordinatorRepository.aggregateCoordinator(coordinatorData);
 
 	return c.json({ message: "coordinator created successfully" });
 });

@@ -8,6 +8,8 @@ import { CoordinatorRepository } from "@/models/repositories/coordinator";
 import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
 
+const countResultSchema = z.object({ count: z.number() });
+
 export class BunCoordinatorRepository implements CoordinatorRepository {
 	private db: Database;
 
@@ -35,29 +37,35 @@ export class BunCoordinatorRepository implements CoordinatorRepository {
 	async aggregateCoordinator(coordinator: NewCoordinator): Promise<void> {
 		const preQuery = this.db.query(`
 			SELECT COUNT(id) AS count FROM user WHERE username = $username;`);
-		const result: any = await preQuery.get({ $username: coordinator.username });
+		const result = await preQuery.get({ $username: coordinator.username });
 
-		if (z.number().parse(result.count) > 0) {
+		if (countResultSchema.parse(result).count > 0) {
+			console.log(result);
 			throw new HTTPException(400, { message: "Username already exists" });
 		}
 
 		try {
-			const query = this.db.query(`
+			const userQuery = this.db.query(`
 				INSERT INTO user (username, password, role)
 					VALUES ($username, $password, 'coordinator');
+			`);
+			userQuery.run({
+				$username: coordinator.username,
+				$password: coordinator.password,
+			});
+
+			const query = this.db.query(`
 				INSERT INTO coordinator (ic, name, last_name, entry_date, withdraw_date, user_id)
 					VALUES ($ic, $name, $last_name, $entry_date, $withdraw_date,
 						(SELECT id FROM user WHERE username = $username));
 			`);
-
 			query.run({
-				$username: coordinator.username,
-				$password: coordinator.password,
 				$ic: coordinator.ic,
 				$name: coordinator.name,
 				$last_name: coordinator.last_name,
 				$entry_date: coordinator.entry_date,
-				$withdraw_date: coordinator.withdraw_date,
+				$withdraw_date: coordinator.withdraw_date || null,
+				$username: coordinator.username,
 			});
 		} catch (err) {
 			console.error(err);
