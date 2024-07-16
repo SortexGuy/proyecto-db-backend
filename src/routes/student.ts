@@ -5,7 +5,7 @@ import {
 	studentRepository,
 	userRepository,
 } from "@/dependencies";
-import { newStudentSchema, studentSchema } from "@/models/student";
+import { newStudentSchema, updatedStudentSchema } from "@/models/student";
 import { zValidator } from "@hono/zod-validator";
 import { authValidator } from "@/utils/authValidator";
 
@@ -53,6 +53,15 @@ student.post("/", zValidator("json", newStudentSchema), async (c) => {
 
 	studentRepository.aggregateStudent(studentData);
 	return c.json({ message: "student created successfully" });
+});
+
+student.put("/:id", zValidator("json", updatedStudentSchema), async (c) => {
+	await authValidator(userRepository, c, "coordinator");
+	const id = c.req.param("id");
+	const studentData = c.req.valid("json");
+
+	studentRepository.updateStudent(parseInt(id), studentData);
+	return c.json({ message: "student updated successfully" });
 });
 
 export default student;

@@ -17,3 +17,9 @@ export const newTeacherSchema = teacherSchema
 	.merge(newUserSchema.omit({ role: true }));
 
 export type NewTeacher = z.infer<typeof newTeacherSchema>;
+
+export const updatedTeacherSchema = teacherSchema
+	.omit({ id: true, user_id: true })
+	.partial();
+
+export type UpdatedTeacher = z.infer<typeof updatedTeacherSchema>;

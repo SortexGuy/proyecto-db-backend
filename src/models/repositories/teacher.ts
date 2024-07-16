@@ -1,4 +1,4 @@
-import { NewTeacher, Teacher } from "@/models/teacher";
+import { NewTeacher, Teacher, UpdatedTeacher } from "@/models/teacher";
 import { ExtCharge, NewCharge } from "@/models/charge";
 
 export interface TeacherRepository {
@@ -7,4 +7,5 @@ export interface TeacherRepository {
 	getTeacherAcademicChargesByTeacherId(id: string): Promise<ExtCharge[]>;
 	aggregateTeacher(teacher: NewTeacher): Promise<void>;
 	asignNewCharge(charge: NewCharge): void;
+	updateTeacher(id: number, teacher: UpdatedTeacher): void;
 }

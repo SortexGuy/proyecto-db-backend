@@ -3,6 +3,7 @@ import { QualificationRepository } from "@/models/repositories/qualification";
 import {
 	NewQualification,
 	Qualification,
+	UpdatedQualification,
 	qualificationSchema,
 } from "@/models/qualification";
 import {
@@ -76,6 +77,24 @@ export class BunQualificationRepository implements QualificationRepository {
 				$charge_id: qualification.charge_id,
 				$student_id: qualification.student_id,
 			});
+		} catch (err) {
+			console.error(err);
+			throw new HTTPException(500, { message: "Internal Server Error" });
+		}
+	}
+
+	updateQualification(id: number, qualification: UpdatedQualification): void {
+		let queryStr = `UPDATE qualification SET`;
+		let params: any = { $id: id };
+		for (const [key, value] of Object.entries(qualification)) {
+			queryStr += ` ${key} = $${key},`;
+			params[`$${key}`] = value;
+		}
+		queryStr = queryStr.slice(0, -1) + ` WHERE id = $id`;
+
+		try {
+			const query = this.db.query(queryStr);
+			query.run(params);
 		} catch (err) {
 			console.error(err);
 			throw new HTTPException(500, { message: "Internal Server Error" });

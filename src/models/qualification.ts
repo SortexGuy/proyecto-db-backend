@@ -29,3 +29,9 @@ export type ExtQualification = z.infer<typeof extQualificationSchema>;
 export const newQualificationSchema = qualificationSchema.omit({ id: true });
 
 export type NewQualification = z.infer<typeof newQualificationSchema>;
+
+export const updatedQualificationSchema = qualificationSchema
+	.omit({ id: true })
+	.partial();
+
+export type UpdatedQualification = z.infer<typeof updatedQualificationSchema>;

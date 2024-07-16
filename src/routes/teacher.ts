@@ -5,7 +5,7 @@ import { userRepository } from "../dependencies";
 import { authValidator } from "@/utils/authValidator";
 import { zValidator } from "@hono/zod-validator";
 import { newChargeSchema } from "@/models/charge";
-import { newTeacherSchema } from "@/models/teacher";
+import { newTeacherSchema, updatedTeacherSchema } from "@/models/teacher";
 
 const teacher = new Hono();
 
@@ -87,6 +87,15 @@ teacher.post("/:id/charges", zValidator("json", newChargeSchema), async (c) => {
 	chargeData.teacher_id = foundTeacher.id;
 	teacherRepository.asignNewCharge(chargeData);
 	return c.json({ message: "Charge asignated successfully" });
+});
+
+teacher.put("/:id", zValidator("json", updatedTeacherSchema), async (c) => {
+	await authValidator(userRepository, c, "coordinator");
+	const id = c.req.param("id");
+	const teacherData = c.req.valid("json");
+
+	teacherRepository.updateTeacher(parseInt(id), teacherData);
+	return c.json({ message: "teacher updated successfully" });
 });
 
 export default teacher;

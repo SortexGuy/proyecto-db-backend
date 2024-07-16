@@ -1,7 +1,12 @@
 import { Database } from "bun:sqlite";
 import { TeacherRepository } from "@/models/repositories/teacher";
 import { ExtCharge, NewCharge, extChargeSchema } from "@/models/charge";
-import { teacherSchema, Teacher, NewTeacher } from "@/models/teacher";
+import {
+	teacherSchema,
+	Teacher,
+	NewTeacher,
+	UpdatedTeacher,
+} from "@/models/teacher";
 import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
 
@@ -113,6 +118,24 @@ export class BunTeacherRepository implements TeacherRepository {
 				$course_id: charge.course_id,
 				$teacher_id: charge.teacher_id,
 			});
+		} catch (err) {
+			console.error(err);
+			throw new HTTPException(500, { message: "Internal Server Error" });
+		}
+	}
+
+	updateTeacher(id: number, teacher: UpdatedTeacher): void {
+		let queryStr = `UPDATE teacher SET`;
+		let params: any = { $id: id };
+		for (const [key, value] of Object.entries(teacher)) {
+			queryStr += ` ${key} = $${key},`;
+			params[`$${key}`] = value;
+		}
+		queryStr = queryStr.slice(0, -1) + ` WHERE id = $id`;
+
+		try {
+			const query = this.db.query(queryStr);
+			query.run(params);
 		} catch (err) {
 			console.error(err);
 			throw new HTTPException(500, { message: "Internal Server Error" });

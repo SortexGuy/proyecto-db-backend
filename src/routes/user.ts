@@ -2,8 +2,6 @@ import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { userRepository } from "../dependencies";
 import { authValidator } from "@/utils/authValidator";
-import { zValidator } from "@hono/zod-validator";
-import { newUserSchema } from "@/models/user";
 
 const user = new Hono();
 

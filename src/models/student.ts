@@ -14,3 +14,7 @@ export type Student = z.infer<typeof studentSchema>;
 export const newStudentSchema = studentSchema.omit({ id: true });
 
 export type NewStudent = z.infer<typeof newStudentSchema>;
+
+export const updatedStudentSchema = studentSchema.omit({ id: true }).partial();
+
+export type UpdatedStudent = z.infer<typeof updatedStudentSchema>;

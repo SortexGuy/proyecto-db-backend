@@ -11,3 +11,9 @@ export type RepStudent = z.infer<typeof repStudentSchema>;
 export const newRepStudentSchema = repStudentSchema.omit({ id: true });
 
 export type NewRepStudent = z.infer<typeof newRepStudentSchema>;
+
+export const updatedRepStudentSchema = repStudentSchema
+	.omit({ id: true })
+	.partial();
+
+export type UpdatedRepStudent = z.infer<typeof updatedRepStudentSchema>;

@@ -1,4 +1,8 @@
-import { NewRepresentative, Representative } from "@/models/representative";
+import {
+	NewRepresentative,
+	Representative,
+	UpdatedRepresentative,
+} from "@/models/representative";
 import { Student } from "@/models/student";
 import { NewRepStudent } from "@/models/repStudent";
 
@@ -8,4 +12,5 @@ export interface RepresentativeRepository {
 	getStudentsByRepresentativeId(id: string): Promise<Student[]>;
 	aggregateRepresentative(representative: NewRepresentative): Promise<void>;
 	aggregateStudentToRepresentative(repStudent: NewRepStudent): Promise<void>;
+	updateRepresentative(id: number, representative: UpdatedRepresentative): void;
 }

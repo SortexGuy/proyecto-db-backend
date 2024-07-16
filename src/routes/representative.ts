@@ -6,7 +6,7 @@ import { authValidator } from "@/utils/authValidator";
 import { zValidator } from "@hono/zod-validator";
 import {
 	newRepresentativeSchema,
-	representativeSchema,
+	updatedRepresentativeSchema,
 } from "@/models/representative";
 import { newRepStudentSchema } from "@/models/repStudent";
 
@@ -81,11 +81,7 @@ representative.post(
 	"/",
 	zValidator("json", newRepresentativeSchema),
 	async (c) => {
-		const userCoordinator = await authValidator(
-			userRepository,
-			c,
-			"coordinator",
-		);
+		await authValidator(userRepository, c, "coordinator");
 		const representativeData = c.req.valid("json");
 
 		representativeData.password = Bun.password.hashSync(
@@ -109,6 +105,22 @@ representative.post(
 			repStudentData,
 		);
 		return c.json({ message: "relationship created successfully" });
+	},
+);
+
+representative.put(
+	"/:id",
+	zValidator("json", updatedRepresentativeSchema),
+	async (c) => {
+		await authValidator(userRepository, c, "coordinator");
+		const id = c.req.param("id");
+		const representativeData = c.req.valid("json");
+
+		representativeRepository.updateRepresentative(
+			parseInt(id),
+			representativeData,
+		);
+		return c.json({ message: "student updated successfully" });
 	},
 );
 
