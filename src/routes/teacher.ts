@@ -62,7 +62,7 @@ teacher.get("/:id/charges", async (c) => {
 });
 
 teacher.post("/", zValidator("json", newTeacherSchema), async (c) => {
-	const userCoordinator = await authValidator(userRepository, c, "coordinator");
+	await authValidator(userRepository, c, "coordinator");
 	const teacherData = c.req.valid("json");
 
 	teacherData.password = Bun.password.hashSync(teacherData.password, {
@@ -74,8 +74,7 @@ teacher.post("/", zValidator("json", newTeacherSchema), async (c) => {
 });
 
 teacher.post("/:id/charges", zValidator("json", newChargeSchema), async (c) => {
-	const userCoordinator = await authValidator(userRepository, c, "coordinator");
-
+	await authValidator(userRepository, c, "coordinator");
 	const id = c.req.param("id");
 	const foundTeacher = await teacherRepository.getTeacherByUserId(id);
 
@@ -87,7 +86,6 @@ teacher.post("/:id/charges", zValidator("json", newChargeSchema), async (c) => {
 
 	chargeData.teacher_id = foundTeacher.id;
 	teacherRepository.asignNewCharge(chargeData);
-
 	return c.json({ message: "Charge asignated successfully" });
 });
 
