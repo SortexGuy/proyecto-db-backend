@@ -3,6 +3,8 @@ import { HTTPException } from "hono/http-exception";
 import { coordinatorRepository } from "../dependencies";
 import { userRepository } from "../dependencies";
 import { authValidator } from "@/utils/authValidator";
+import { zValidator } from "@hono/zod-validator";
+import { newCoordinatorSchema } from "@/models/coordinator";
 
 const coordinator = new Hono();
 
@@ -25,6 +27,18 @@ coordinator.get("/:id", async (c) => {
 	}
 
 	return c.json(foundCoordinator);
+});
+
+coordinator.post("/", zValidator("json", newCoordinatorSchema), async (c) => {
+	const userCoordinator = await authValidator(userRepository, c, "coordinator");
+	const coordinatorData = c.req.valid("json");
+
+	coordinatorData.password = Bun.password.hashSync(coordinatorData.password, {
+		algorithm: "bcrypt",
+	});
+	await coordinatorRepository.aggregateCoordinator(coordinatorData);
+
+	return c.json({ message: "coordinator created successfully" });
 });
 
 export default coordinator;

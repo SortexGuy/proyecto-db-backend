@@ -1,10 +1,15 @@
 import { Database } from "bun:sqlite";
 import { QualificationRepository } from "@/models/repositories/qualification";
-import { Qualification, qualificationSchema } from "@/models/qualification";
+import {
+	NewQualification,
+	Qualification,
+	qualificationSchema,
+} from "@/models/qualification";
 import {
 	ExtQualification,
 	extQualificationSchema,
 } from "@/models/qualification";
+import { HTTPException } from "hono/http-exception";
 
 export class BunQualificationRepository implements QualificationRepository {
 	private db: Database;
@@ -56,6 +61,24 @@ export class BunQualificationRepository implements QualificationRepository {
 		} catch (err) {
 			console.error(err);
 			return [];
+		}
+	}
+
+	aggregateQualification(qualification: NewQualification): void {
+		try {
+			const query = this.db
+				.query(`INSERT INTO qualification (value, lapse, charge_id, student_id)
+					VALUES ($value, $lapse, $charge_id, $student_id)`);
+
+			query.run({
+				$value: qualification.value,
+				$lapse: qualification.lapse,
+				$charge_id: qualification.charge_id,
+				$student_id: qualification.student_id,
+			});
+		} catch (err) {
+			console.error(err);
+			throw new HTTPException(500, { message: "Internal Server Error" });
 		}
 	}
 }

@@ -10,3 +10,7 @@ export const studentSchema = z.object({
 });
 
 export type Student = z.infer<typeof studentSchema>;
+
+export const newStudentSchema = studentSchema.omit({ id: true });
+
+export type NewStudent = z.infer<typeof newStudentSchema>;

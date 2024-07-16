@@ -1,8 +1,9 @@
 import { Database } from "bun:sqlite";
 import { TeacherRepository } from "@/models/repositories/teacher";
 import { ExtCharge, NewCharge, extChargeSchema } from "@/models/charge";
-import { teacherSchema, Teacher } from "@/models/teacher";
+import { teacherSchema, Teacher, NewTeacher } from "@/models/teacher";
 import { HTTPException } from "hono/http-exception";
+import { z } from "zod";
 
 export class BunTeacherRepository implements TeacherRepository {
 	private db: Database;
@@ -61,6 +62,42 @@ export class BunTeacherRepository implements TeacherRepository {
 		} catch (err) {
 			console.error(err);
 			return [];
+		}
+	}
+
+	async aggregateTeacher(teacher: NewTeacher): Promise<void> {
+		const preQuery = this.db.query(`
+			SELECT COUNT(id) AS count FROM user WHERE username = $username;`);
+		const result: any = await preQuery.get({ $username: teacher.username });
+
+		if (z.number().parse(result.count) > 0) {
+			throw new HTTPException(400, { message: "Username already exists" });
+		}
+
+		try {
+			const userQuery = this.db.query(`
+				INSERT INTO user (username, password, role)
+					VALUES ($username, $password, 'teacher');
+			`);
+			userQuery.run({
+				$username: teacher.username,
+				$password: teacher.password,
+			});
+
+			const query = this.db.query(`
+				INSERT INTO teacher (ic, name, last_name, user_id)
+					VALUES ($ic, $name, $last_name,
+						(SELECT id FROM user WHERE username = $username));
+			`);
+			query.run({
+				$ic: teacher.ic,
+				$name: teacher.name,
+				$last_name: teacher.last_name,
+				$username: teacher.username,
+			});
+		} catch (err) {
+			console.error(err);
+			throw new HTTPException(500, { message: "Internal Server Error" });
 		}
 	}
 

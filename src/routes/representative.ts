@@ -3,6 +3,12 @@ import { HTTPException } from "hono/http-exception";
 import { representativeRepository } from "../dependencies";
 import { userRepository } from "../dependencies";
 import { authValidator } from "@/utils/authValidator";
+import { zValidator } from "@hono/zod-validator";
+import {
+	newRepresentativeSchema,
+	representativeSchema,
+} from "@/models/representative";
+import { newRepStudentSchema } from "@/models/repStudent";
 
 const representative = new Hono();
 
@@ -70,5 +76,46 @@ representative.get("/", async (c) => {
 representative.get("/:id/students", async (c) => {
 	// TODO: Implement this
 });
+
+representative.post(
+	"/",
+	zValidator("json", newRepresentativeSchema),
+	async (c) => {
+		const userCoordinator = await authValidator(
+			userRepository,
+			c,
+			"coordinator",
+		);
+		const representativeData = c.req.valid("json");
+
+		representativeData.password = Bun.password.hashSync(
+			representativeData.password,
+			{ algorithm: "bcrypt" },
+		);
+		representativeRepository.aggregateRepresentative(representativeData);
+
+		return c.json({ message: "representative created successfully" });
+	},
+);
+
+representative.post(
+	"/students",
+	zValidator("json", newRepStudentSchema),
+	async (c) => {
+		const userCoordinator = await authValidator(
+			userRepository,
+			c,
+			"coordinator",
+		);
+
+		const repStudentData = c.req.valid("json");
+
+		await representativeRepository.aggregateStudentToRepresentative(
+			repStudentData,
+		);
+
+		return c.json({ message: "relationship created successfully" });
+	},
+);
 
 export default representative;
