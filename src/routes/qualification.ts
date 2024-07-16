@@ -22,16 +22,10 @@ qualification.post(
 	"/",
 	zValidator("json", newQualificationSchema),
 	async (c) => {
-		const userCoordinator = await authValidator(
-			userRepository,
-			c,
-			"coordinator",
-		);
-
+		await authValidator(userRepository, c, "coordinator");
 		const studentData = c.req.valid("json");
 
 		qualificationRepository.aggregateQualification(studentData);
-
 		return c.json({ message: "student created successfully" });
 	},
 );

@@ -102,18 +102,12 @@ representative.post(
 	"/students",
 	zValidator("json", newRepStudentSchema),
 	async (c) => {
-		const userCoordinator = await authValidator(
-			userRepository,
-			c,
-			"coordinator",
-		);
-
+		await authValidator(userRepository, c, "coordinator");
 		const repStudentData = c.req.valid("json");
 
 		await representativeRepository.aggregateStudentToRepresentative(
 			repStudentData,
 		);
-
 		return c.json({ message: "relationship created successfully" });
 	},
 );

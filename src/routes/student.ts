@@ -48,12 +48,10 @@ student.get("/:id/qualifications", async (c) => {
 });
 
 student.post("/", zValidator("json", newStudentSchema), async (c) => {
-	const userCoordinator = await authValidator(userRepository, c, "coordinator");
-
+	await authValidator(userRepository, c, "coordinator");
 	const studentData = c.req.valid("json");
 
 	studentRepository.aggregateStudent(studentData);
-
 	return c.json({ message: "student created successfully" });
 });
 

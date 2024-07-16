@@ -30,7 +30,7 @@ coordinator.get("/:id", async (c) => {
 });
 
 coordinator.post("/", zValidator("json", newCoordinatorSchema), async (c) => {
-	const userCoordinator = await authValidator(userRepository, c, "coordinator");
+	await authValidator(userRepository, c, "coordinator");
 	const coordinatorData = c.req.valid("json");
 
 	coordinatorData.password = Bun.password.hashSync(coordinatorData.password, {

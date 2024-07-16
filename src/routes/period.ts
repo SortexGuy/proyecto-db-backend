@@ -28,12 +28,10 @@ period.get("/", async (c) => {
 });
 
 period.post("/", zValidator("json", newPeriodSchema), async (c) => {
-	const userCoordinator = await authValidator(userRepository, c, "coordinator");
-
+	await authValidator(userRepository, c, "coordinator");
 	const periodData = c.req.valid("json");
 
 	periodRepository.createPeriod(periodData);
-
 	return c.json({ message: "period created successfully" });
 });
 
