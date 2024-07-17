@@ -3,7 +3,9 @@ import { StudentRepository } from "@/models/repositories/student";
 import {
 	NewStudent,
 	Student,
+	StudentInfo,
 	UpdatedStudent,
+	studentInfoSchema,
 	studentSchema,
 } from "@/models/student";
 import { HTTPException } from "hono/http-exception";
@@ -24,6 +26,34 @@ export class BunStudentRepository implements StudentRepository {
 			});
 
 			return studentSchema.parse(result);
+		} catch (err) {
+			console.error(err);
+			return null;
+		}
+	}
+
+	async getStudentInfoByIc(ic: string): Promise<StudentInfo | null> {
+		try {
+			const repQuery = this.db.query(`
+				SELECT r.id, r.ic, r.name, r.last_name, r.user_id
+				FROM representative_student AS rs
+					INNER JOIN representative AS r ON rs.representative_id = r.id
+					INNER JOIN student AS s ON rs.student_id = s.id
+				WHERE s.ic = $ic;
+		`);
+			const query = this.db.query(`SELECT * FROM student WHERE ic = $ic`);
+
+			const repResult = repQuery.all({
+				$ic: ic,
+			});
+			console.log(repResult);
+			let result: any = await query.get({
+				$ic: ic,
+			});
+			result.representatives = repResult;
+			console.log(result);
+
+			return studentInfoSchema.parse(result);
 		} catch (err) {
 			console.error(err);
 			return null;
