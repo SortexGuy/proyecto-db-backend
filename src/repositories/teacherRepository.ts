@@ -25,7 +25,6 @@ export class BunTeacherRepository implements TeacherRepository {
 				$id: id,
 			});
 
-			console.log(result);
 			return teacherSchema.parse(result);
 		} catch (err) {
 			console.error(err);
@@ -62,7 +61,6 @@ export class BunTeacherRepository implements TeacherRepository {
 				$id: id,
 			});
 
-			console.log(result);
 			return extChargeSchema.array().parse(result);
 		} catch (err) {
 			console.error(err);

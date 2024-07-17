@@ -63,7 +63,6 @@ export class BunRepresentativeRepository implements RepresentativeRepository {
 				$id: id,
 			});
 
-			console.log(result);
 			return studentSchema.array().parse(result);
 		} catch (err) {
 			console.error(err);
