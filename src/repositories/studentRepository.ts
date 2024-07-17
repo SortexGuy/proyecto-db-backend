@@ -46,12 +46,10 @@ export class BunStudentRepository implements StudentRepository {
 			const repResult = repQuery.all({
 				$ic: ic,
 			});
-			console.log(repResult);
 			let result: any = await query.get({
 				$ic: ic,
 			});
 			result.representatives = repResult;
-			console.log(result);
 
 			return studentInfoSchema.parse(result);
 		} catch (err) {

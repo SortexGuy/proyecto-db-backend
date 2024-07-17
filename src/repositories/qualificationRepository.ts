@@ -58,7 +58,6 @@ export class BunQualificationRepository implements QualificationRepository {
 				$id: id,
 			});
 
-			console.log(result);
 			return extQualificationSchema.array().parse(result);
 		} catch (err) {
 			console.error(err);
@@ -142,7 +141,6 @@ export class BunQualificationRepository implements QualificationRepository {
 			const cRealKeys = ["year", "name"];
 			cKeys.forEach((key, i) => {
 				if (qualification.hasOwnProperty(key)) {
-					console.log(key);
 					queryStr += ` c.${cRealKeys[i]} = $${key} AND`;
 					params[`$${key}`] = qualification[key as keyof SearchQualification];
 				}
@@ -152,12 +150,10 @@ export class BunQualificationRepository implements QualificationRepository {
 			}
 			queryStr = queryStr.slice(0, -3) + `;`;
 		}
-		console.log(queryStr);
 		try {
 			const query = this.db.query(queryStr);
 			const result = query.all(params);
 
-			console.log(result);
 			return extQualificationSchema.array().parse(result);
 		} catch (err) {
 			console.error(err);
@@ -186,8 +182,6 @@ export class BunQualificationRepository implements QualificationRepository {
 			const result = query.all({
 				$ic: ic,
 			});
-
-			console.log(result);
 			return extQualificationSchema.array().parse(result);
 		} catch (err) {
 			console.error(err);
