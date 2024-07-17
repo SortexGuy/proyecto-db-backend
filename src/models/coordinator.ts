@@ -6,6 +6,7 @@ export const coordinatorSchema = z.object({
 	ic: z.string(),
 	name: z.string(),
 	last_name: z.string(),
+	contact: z.string(),
 	entry_date: z.string(),
 	withdraw_date: z.string().nullable(),
 

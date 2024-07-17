@@ -6,6 +6,7 @@ export const representativeSchema = z.object({
 	ic: z.string(),
 	name: z.string(),
 	last_name: z.string(),
+	contact: z.string(),
 
 	user_id: z.number(),
 });

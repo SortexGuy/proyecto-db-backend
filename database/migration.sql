@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS teacher (
   ic TEXT NOT NULL,
   name TEXT NOT NULL,
   last_name TEXT NOT NULL,
+  contact TEXT,
 
   user_id INTEGER NOT NULL,
 
@@ -24,6 +25,7 @@ CREATE TABLE IF NOT EXISTS representative (
   ic TEXT NOT NULL,
   name TEXT NOT NULL,
   last_name TEXT NOT NULL,
+  contact TEXT,
 
   user_id INTEGER NOT NULL,
 
@@ -35,6 +37,7 @@ CREATE TABLE IF NOT EXISTS coordinator (
   ic TEXT NOT NULL,
   name TEXT NOT NULL,
   last_name TEXT NOT NULL,
+  contact TEXT,
   entry_date DATE NOT NULL,
   withdraw_date DATE,
 

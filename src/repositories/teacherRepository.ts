@@ -88,8 +88,8 @@ export class BunTeacherRepository implements TeacherRepository {
 			});
 
 			const query = this.db.query(`
-				INSERT INTO teacher (ic, name, last_name, user_id)
-					VALUES ($ic, $name, $last_name,
+				INSERT INTO teacher (ic, name, last_name, contact, user_id)
+					VALUES ($ic, $name, $last_name, $contact,
 						(SELECT id FROM user WHERE username = $username));
 			`);
 			query.run({
