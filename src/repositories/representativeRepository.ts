@@ -112,29 +112,34 @@ export class BunRepresentativeRepository implements RepresentativeRepository {
 	}
 
 	async aggregateStudentToRepresentative(
-		repStudent: NewRepStudent,
+		rep_user_id: string,
+		student_ic: string,
 	): Promise<void> {
-		const preQuery = this.db
-			.query(`SELECT COUNT(*) AS count FROM representative_student
-				WHERE student_id = $student_id`);
-		const result: any = await preQuery.get({
-			$student_id: repStudent.student_id,
-		});
-		const count = z.number().parse(result.count);
-		if (count >= 3) {
-			throw new HTTPException(400, {
-				message: "student already has 3 representatives",
-			});
-		}
-
 		try {
+			const stQuery = this.db.query(`SELECT id FROM student WHERE ic = $ic`);
+			const stResult: any = await stQuery.get({ $ic: student_ic });
+			const student_id = z.number().parse(stResult.id);
+
+			const preQuery = this.db
+				.query(`SELECT COUNT(*) AS count FROM representative_student
+				WHERE student_id = $student_id`);
+			const result: any = await preQuery.get({
+				$student_id: student_id,
+			});
+			const count = z.number().parse(result.count);
+			if (count >= 3) {
+				throw new HTTPException(400, {
+					message: "student already has 3 representatives",
+				});
+			}
+
 			const query = this.db
 				.query(`INSERT INTO representative_student (representative_id, student_id)
-					VALUES ($representative_id, $student_id)`);
+					VALUES ((SELECT id FROM representative WHERE user_id = $rep_user_id), $student_id)`);
 
 			query.run({
-				$representative_id: repStudent.representative_id,
-				$student_id: repStudent.student_id,
+				$rep_user_id: rep_user_id,
+				$student_id: student_id,
 			});
 		} catch (err) {
 			console.error(err);
@@ -157,6 +162,19 @@ export class BunRepresentativeRepository implements RepresentativeRepository {
 		try {
 			const query = this.db.query(queryStr);
 			query.run(params);
+		} catch (err) {
+			console.error(err);
+			throw new HTTPException(500, { message: "Internal Server Error" });
+		}
+	}
+
+	deleteRepresentativeByUserId(id: string): void {
+		try {
+			const query = this.db.query(`
+				DELETE FROM user WHERE id = $id
+			`);
+
+			query.run({ $id: id });
 		} catch (err) {
 			console.error(err);
 			throw new HTTPException(500, { message: "Internal Server Error" });

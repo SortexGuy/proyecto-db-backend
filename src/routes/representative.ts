@@ -9,6 +9,7 @@ import {
 	updatedRepresentativeSchema,
 } from "@/models/representative";
 import { newRepStudentSchema } from "@/models/repStudent";
+import { z } from "zod";
 
 const representative = new Hono();
 
@@ -90,6 +91,22 @@ representative.get("/:id/students", async (c) => {
 });
 
 representative.post(
+	"/:id/students",
+	zValidator("json", z.object({ ic: z.string() })),
+	async (c) => {
+		await authValidator(userRepository, c, "coordinator");
+		const user_id = c.req.param("id");
+		const studentData = c.req.valid("json");
+
+		await representativeRepository.aggregateStudentToRepresentative(
+			user_id,
+			studentData.ic,
+		);
+		return c.json({ message: "relationship created successfully" });
+	},
+);
+
+representative.post(
 	"/",
 	zValidator("json", newRepresentativeSchema),
 	async (c) => {
@@ -103,20 +120,6 @@ representative.post(
 		representativeRepository.aggregateRepresentative(representativeData);
 
 		return c.json({ message: "representative created successfully" });
-	},
-);
-
-representative.post(
-	"/students",
-	zValidator("json", newRepStudentSchema),
-	async (c) => {
-		await authValidator(userRepository, c, "coordinator");
-		const repStudentData = c.req.valid("json");
-
-		await representativeRepository.aggregateStudentToRepresentative(
-			repStudentData,
-		);
-		return c.json({ message: "relationship created successfully" });
 	},
 );
 
@@ -135,5 +138,13 @@ representative.put(
 		return c.json({ message: "student updated successfully" });
 	},
 );
+
+representative.delete("/:ic", async (c) => {
+	await authValidator(userRepository, c, "coordinator");
+	const ic = c.req.param("ic");
+
+	representativeRepository.deleteRepresentativeByUserId(ic);
+	return c.json({ message: "Representative deleted successfully" });
+});
 
 export default representative;

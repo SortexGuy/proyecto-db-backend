@@ -23,6 +23,16 @@ student.get("/:ic/qualifications", async (c) => {
 	return c.json(qualifications);
 });
 
+student.get("/:ic/info", async (c) => {
+	const ic = c.req.param("ic");
+	const foundStudent = await studentRepository.getStudentInfoByIc(ic);
+	if (!foundStudent) {
+		throw new HTTPException(404, { message: "Student not found" });
+	}
+
+	return c.json(foundStudent);
+});
+
 student.get("/:id", async (c) => {
 	const id = c.req.param("id");
 	const foundStudent = await studentRepository.getStudentById(id);

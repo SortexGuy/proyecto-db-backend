@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { representativeSchema } from "./representative";
 
 export const studentSchema = z.object({
 	id: z.number(),
@@ -18,3 +19,9 @@ export type NewStudent = z.infer<typeof newStudentSchema>;
 export const updatedStudentSchema = studentSchema.omit({ id: true }).partial();
 
 export type UpdatedStudent = z.infer<typeof updatedStudentSchema>;
+
+export const studentInfoSchema = studentSchema.extend({
+	representatives: z.array(representativeSchema),
+});
+
+export type StudentInfo = z.infer<typeof studentInfoSchema>;
