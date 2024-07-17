@@ -162,4 +162,17 @@ export class BunRepresentativeRepository implements RepresentativeRepository {
 			throw new HTTPException(500, { message: "Internal Server Error" });
 		}
 	}
+
+	deleteRepresentativeByUserId(id: string): void {
+		try {
+			const query = this.db.query(`
+				DELETE FROM user WHERE id = $id
+			`);
+
+			query.run({ $id: id });
+		} catch (err) {
+			console.error(err);
+			throw new HTTPException(500, { message: "Internal Server Error" });
+		}
+	}
 }

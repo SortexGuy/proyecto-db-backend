@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS representative (
 
   user_id INTEGER NOT NULL,
 
-  FOREIGN KEY (user_id) REFERENCES user(id)
+  FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS coordinator (
@@ -97,6 +97,6 @@ CREATE TABLE IF NOT EXISTS representative_student (
   student_id INTEGER NOT NULL,
 
   PRIMARY KEY (representative_id, student_id),
-  FOREIGN KEY (representative_id) REFERENCES representative(id),
+  FOREIGN KEY (representative_id) REFERENCES representative(id) ON DELETE CASCADE,
   FOREIGN KEY (student_id) REFERENCES student(id)
 );

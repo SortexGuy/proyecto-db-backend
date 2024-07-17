@@ -9,6 +9,7 @@ import { BunTeacherRepository } from "./repositories/teacherRepository";
 import { BunRepresentativeRepository } from "./repositories/representativeRepository";
 
 export const db = new Database("./database/db.sqlite");
+db.run("PRAGMA foreign_keys = ON;");
 export const userRepository = new BunUserRepository(db);
 export const courseRepository = new BunCourseRepository(db);
 export const periodRepository = new BunPeriodRepository(db);

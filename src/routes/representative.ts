@@ -136,4 +136,12 @@ representative.put(
 	},
 );
 
+representative.delete("/:ic", async (c) => {
+	await authValidator(userRepository, c, "coordinator");
+	const ic = c.req.param("ic");
+
+	representativeRepository.deleteRepresentativeByUserId(ic);
+	return c.json({ message: "Representative deleted successfully" });
+});
+
 export default representative;
