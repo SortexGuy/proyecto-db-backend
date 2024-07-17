@@ -32,6 +32,21 @@ export class BunStudentRepository implements StudentRepository {
 		}
 	}
 
+	async getStudentByIc(ic: string): Promise<Student | null> {
+		try {
+			const query = this.db.query(`SELECT * FROM student WHERE ic = $ic`);
+
+			const result = await query.get({
+				$ic: ic,
+			});
+
+			return studentSchema.parse(result);
+		} catch (err) {
+			console.error(err);
+			return null;
+		}
+	}
+
 	async getStudentInfoByIc(ic: string): Promise<StudentInfo | null> {
 		try {
 			const repQuery = this.db.query(`

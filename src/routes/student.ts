@@ -11,11 +11,33 @@ import { authValidator } from "@/utils/authValidator";
 
 const student = new Hono();
 
-student.get("/:ic/qualifications", async (c) => {
+student.get("/byic/:ic/qualifications", async (c) => {
 	const ic = c.req.param("ic");
+	const foundStudent = await studentRepository.getStudentByIc(ic);
+	if (!foundStudent) {
+		throw new HTTPException(404, { message: "Student not found" });
+	}
 
 	const qualifications =
-		await qualificationRepository.getStudentFinalGrades(ic);
+		await qualificationRepository.getQualificationsByStudentId(
+			foundStudent.id.toString(),
+		);
+	if (!qualifications) {
+		throw new HTTPException(404, { message: "Student not found" });
+	}
+
+	return c.json(qualifications);
+});
+
+student.get("/:id/qualifications", async (c) => {
+	const id = c.req.param("id");
+	const foundStudent = await studentRepository.getStudentById(id);
+	if (!foundStudent) {
+		throw new HTTPException(404, { message: "Student not found" });
+	}
+
+	const qualifications =
+		await qualificationRepository.getQualificationsByStudentId(id);
 	if (!qualifications) {
 		throw new HTTPException(404, { message: "Student not found" });
 	}
