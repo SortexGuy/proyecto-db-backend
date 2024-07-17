@@ -47,7 +47,14 @@ export class BunTeacherRepository implements TeacherRepository {
 
 	async getExtChargeById(id: string): Promise<ExtCharge | null> {
 		try {
-			const query = this.db.query(`SELECT * FROM charge WHERE id = $id`);
+			const query = this.db.query(`
+				SELECT charge.id, charge.section,
+				  period.start_date, period.end_date,
+				  course.name AS course_name, course.year AS course_year
+				FROM charge
+					INNER JOIN period ON charge.period_id = period.id
+					INNER JOIN course ON charge.course_id = course.id
+				WHERE id = $id`);
 			const result = await query.get({ $id: id });
 
 			return extChargeSchema.parse(result);
