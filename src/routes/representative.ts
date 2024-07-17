@@ -74,7 +74,19 @@ representative.get("/", async (c) => {
 });
 
 representative.get("/:id/students", async (c) => {
-	// TODO: Implement this
+	const id = c.req.param("id");
+	const foundRepresentative =
+		await representativeRepository.getRepresentativeByUserId(id);
+	if (!foundRepresentative) {
+		throw new HTTPException(404, { message: "Representative not found" });
+	}
+
+	const studentsData =
+		await representativeRepository.getStudentsByRepresentativeId(
+			foundRepresentative.id.toString(),
+		);
+
+	return c.json(studentsData);
 });
 
 representative.post(
