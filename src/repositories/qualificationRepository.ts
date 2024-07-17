@@ -126,6 +126,10 @@ export class BunQualificationRepository implements QualificationRepository {
 					params[`$${key}`] = qualification[key as keyof SearchQualification];
 				}
 			});
+			if (qualification.hasOwnProperty("charge_id")) {
+				queryStr += ` charge.id = $charge_id AND`;
+				params[`$charge_id`] = qualification.charge_id;
+			}
 			if (qualification.hasOwnProperty("section")) {
 				queryStr += ` charge.section = $section AND`;
 				params[`$section`] = qualification.section;

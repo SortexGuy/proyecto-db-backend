@@ -41,6 +41,7 @@ export const searchQualificationSchema = z.object({
 	value: z.coerce.number().min(1).max(20).optional(),
 	lapse: z.coerce.number().min(1).max(3).optional(),
 
+	charge_id: z.coerce.number().optional(),
 	section: z.coerce.number().min(1).max(5).optional(),
 	start_date: z.coerce.string().date().optional(),
 	end_date: z.coerce.string().date().optional(),
