@@ -39,6 +39,16 @@ teacher.get("/", async (c) => {
 	return c.json(foundTeachers);
 });
 
+teacher.get("/charges/:id", async (c) => {
+	const id = c.req.param("id");
+	const foundCharge = await teacherRepository.getExtChargeById(id);
+	if (!foundCharge) {
+		throw new HTTPException(404, { message: "Charge not found" });
+	}
+
+	return c.json(foundCharge);
+});
+
 teacher.get("/:id/charges", async (c) => {
 	const id = c.req.param("id");
 	const foundTeacher = await teacherRepository.getTeacherByUserId(id);

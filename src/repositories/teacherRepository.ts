@@ -1,6 +1,6 @@
 import { Database } from "bun:sqlite";
 import { TeacherRepository } from "@/models/repositories/teacher";
-import { ExtCharge, NewCharge, extChargeSchema } from "@/models/charge";
+import { Charge, ExtCharge, NewCharge, extChargeSchema } from "@/models/charge";
 import {
 	teacherSchema,
 	Teacher,
@@ -42,6 +42,18 @@ export class BunTeacherRepository implements TeacherRepository {
 		} catch (err) {
 			console.error(err);
 			return [];
+		}
+	}
+
+	async getExtChargeById(id: string): Promise<ExtCharge | null> {
+		try {
+			const query = this.db.query(`SELECT * FROM charge WHERE id = $id`);
+			const result = await query.get({ $id: id });
+
+			return extChargeSchema.parse(result);
+		} catch (err) {
+			console.error(err);
+			return null;
 		}
 	}
 
