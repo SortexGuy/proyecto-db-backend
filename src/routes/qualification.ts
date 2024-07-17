@@ -4,11 +4,25 @@ import { qualificationRepository, userRepository } from "../dependencies";
 import { zValidator } from "@hono/zod-validator";
 import {
 	newQualificationSchema,
+	searchQualificationSchema,
 	updatedQualificationSchema,
 } from "@/models/qualification";
 import { authValidator } from "@/utils/authValidator";
 
 const qualification = new Hono();
+
+qualification.get(
+	"/search",
+	zValidator("query", searchQualificationSchema),
+	async (c) => {
+		const searchQualification = c.req.valid("query");
+
+		const foundQualification =
+			await qualificationRepository.searchQualification(searchQualification);
+
+		return c.json(foundQualification);
+	},
+);
 
 qualification.get("/:id", async (c) => {
 	const id = c.req.param("id");

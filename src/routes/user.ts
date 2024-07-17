@@ -2,6 +2,8 @@ import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { userRepository } from "../dependencies";
 import { authValidator } from "@/utils/authValidator";
+import { updatedUserSchema } from "@/models/user";
+import { zValidator } from "@hono/zod-validator";
 
 const user = new Hono();
 
@@ -19,6 +21,15 @@ user.get("/:id", async (c) => {
 	}
 
 	return c.json(foundUser);
+});
+
+user.put("/:id", zValidator("json", updatedUserSchema), async (c) => {
+	await authValidator(userRepository, c, "coordinator");
+	const id = c.req.param("id");
+	const userData = c.req.valid("json");
+
+	userRepository.updateUser(parseInt(id), userData);
+	return c.json({ message: "user updated successfully" });
 });
 
 export default user;

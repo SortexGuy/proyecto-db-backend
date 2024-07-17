@@ -2,6 +2,7 @@ import {
 	ExtQualification,
 	NewQualification,
 	Qualification,
+	SearchQualification,
 	UpdatedQualification,
 } from "@/models/qualification";
 
@@ -10,4 +11,8 @@ export interface QualificationRepository {
 	getQualificationsByStudentId(id: string): Promise<ExtQualification[] | null>;
 	aggregateQualification(qualification: NewQualification): void;
 	updateQualification(id: number, qualification: UpdatedQualification): void;
+	searchQualification(
+		qualification: SearchQualification,
+	): Promise<ExtQualification[]>;
+	getStudentFinalGrades(ic: string): Promise<ExtQualification[]>;
 }

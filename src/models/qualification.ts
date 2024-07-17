@@ -35,3 +35,17 @@ export const updatedQualificationSchema = qualificationSchema
 	.partial();
 
 export type UpdatedQualification = z.infer<typeof updatedQualificationSchema>;
+
+export const searchQualificationSchema = z.object({
+	value: z.coerce.number().min(1).max(20).optional(),
+	lapse: z.coerce.number().min(1).max(3).optional(),
+
+	section: z.coerce.number().min(1).max(5).optional(),
+	start_date: z.coerce.string().date().optional(),
+	end_date: z.coerce.string().date().optional(),
+	course_name: z.coerce.string().optional(),
+	course_year: z.coerce.number().min(1).max(6).optional(),
+	teacher_id: z.coerce.number().optional(),
+});
+
+export type SearchQualification = z.infer<typeof searchQualificationSchema>;
