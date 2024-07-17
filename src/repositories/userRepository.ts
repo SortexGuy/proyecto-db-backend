@@ -42,23 +42,6 @@ export class BunUserRepository implements UserRepository {
 		}
 	}
 
-	createUser(user: NewUser): void {
-		try {
-			const query = this.db
-				.query(`INSERT INTO student (username, password, role)
-					VALUES ($username, $password, $role)`);
-
-			query.run({
-				$username: user.username,
-				$password: user.password,
-				$role: user.role,
-			});
-		} catch (err) {
-			console.error(err);
-			throw new HTTPException(500, { message: "Internal Server Error" });
-		}
-	}
-
 	updateUser(id: number, user: UpdatedUser): void {
 		let queryStr = `UPDATE user SET`;
 		let params: any = { $id: id };

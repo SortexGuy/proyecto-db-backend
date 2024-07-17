@@ -28,6 +28,11 @@ user.put("/:id", zValidator("json", updatedUserSchema), async (c) => {
 	const id = c.req.param("id");
 	const userData = c.req.valid("json");
 
+	if (userData.hasOwnProperty("password")) {
+		userData.password = Bun.password.hashSync(userData.password!, {
+			algorithm: "bcrypt",
+		});
+	}
 	userRepository.updateUser(parseInt(id), userData);
 	return c.json({ message: "user updated successfully" });
 });

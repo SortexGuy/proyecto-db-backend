@@ -12,6 +12,7 @@ export const chargeSchema = z.object({
 export type Charge = z.infer<typeof chargeSchema>;
 
 export const extChargeSchema = z.object({
+	id: z.number(),
 	section: z.number().min(1).max(5),
 	start_date: z.string().date(),
 	end_date: z.string().date(),
