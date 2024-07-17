@@ -54,7 +54,7 @@ export class BunTeacherRepository implements TeacherRepository {
 				FROM charge
 					INNER JOIN period ON charge.period_id = period.id
 					INNER JOIN course ON charge.course_id = course.id
-				WHERE id = $id`);
+				WHERE charge.id = $id`);
 			const result = await query.get({ $id: id });
 
 			return extChargeSchema.parse(result);
