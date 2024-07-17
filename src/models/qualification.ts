@@ -23,6 +23,7 @@ export const extQualificationSchema = z.object({
 	course_name: z.string(),
 	course_year: z.number().min(1).max(6),
 	teacher_id: z.number(),
+	student_id: z.number(),
 });
 
 export type ExtQualification = z.infer<typeof extQualificationSchema>;

@@ -45,7 +45,8 @@ export class BunQualificationRepository implements QualificationRepository {
 				  charge.id AS charge_id, charge.section,
 				  p.start_date, p.end_date,
 				  c.name AS course_name, c.year AS course_year, 
-				  teacher.user_id AS teacher_id
+				  teacher.user_id AS teacher_id,
+          q.student_id
 				FROM qualification AS q
 					INNER JOIN charge ON q.charge_id = charge.id
 					INNER JOIN teacher ON charge.teacher_id = teacher.id
@@ -109,13 +110,15 @@ export class BunQualificationRepository implements QualificationRepository {
 				  charge.id AS charge_id, charge.section,
 				  p.start_date, p.end_date,
 				  c.name AS course_name, c.year AS course_year, 
-				  teacher.user_id AS teacher_id
+				  teacher.user_id AS teacher_id,
+          q.student_id
 				FROM qualification AS q
 					INNER JOIN charge ON q.charge_id = charge.id
 					INNER JOIN teacher ON charge.teacher_id = teacher.id
 					INNER JOIN period AS p ON charge.period_id = p.id
 					INNER JOIN course AS c ON charge.course_id = c.id
 				`;
+
 		let params: any = {};
 		if (Object.keys(qualification).length > 0) {
 			queryStr += `WHERE   `;
@@ -158,6 +161,7 @@ export class BunQualificationRepository implements QualificationRepository {
 			const query = this.db.query(queryStr);
 			const result = query.all(params);
 
+			console.log(result);
 			return extQualificationSchema.array().parse(result);
 		} catch (err) {
 			console.error(err);
