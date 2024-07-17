@@ -42,7 +42,7 @@ export class BunQualificationRepository implements QualificationRepository {
 			const query = this.db.query(`
 				SELECT
 				  q.id, q.value, q.lapse,
-				  charge.section,
+				  charge.id AS charge_id, charge.section,
 				  p.start_date, p.end_date,
 				  c.name AS course_name, c.year AS course_year, 
 				  teacher.user_id AS teacher_id
@@ -106,7 +106,7 @@ export class BunQualificationRepository implements QualificationRepository {
 	): Promise<ExtQualification[]> {
 		let queryStr = `SELECT
 				  q.id, q.value, q.lapse,
-				  charge.section,
+				  charge.id AS charge_id, charge.section,
 				  p.start_date, p.end_date,
 				  c.name AS course_name, c.year AS course_year, 
 				  teacher.user_id AS teacher_id

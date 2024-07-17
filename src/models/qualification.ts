@@ -16,6 +16,7 @@ export const extQualificationSchema = z.object({
 	value: z.number().min(1).max(20),
 	lapse: z.number().min(1).max(3),
 
+	charge_id: z.number(),
 	section: z.number().min(1).max(5),
 	start_date: z.string().date(),
 	end_date: z.string().date(),
