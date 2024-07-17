@@ -50,7 +50,7 @@ export class BunStudentRepository implements StudentRepository {
 	async getStudentInfoByIc(ic: string): Promise<StudentInfo | null> {
 		try {
 			const repQuery = this.db.query(`
-				SELECT r.id, r.ic, r.name, r.last_name, r.user_id
+				SELECT r.id, r.ic, r.name, r.last_name, r.contact, r.user_id
 				FROM representative_student AS rs
 					INNER JOIN representative AS r ON rs.representative_id = r.id
 					INNER JOIN student AS s ON rs.student_id = s.id

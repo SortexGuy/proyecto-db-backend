@@ -14,5 +14,4 @@ export interface QualificationRepository {
 	searchQualification(
 		qualification: SearchQualification,
 	): Promise<ExtQualification[]>;
-	getStudentFinalGrades(ic: string): Promise<ExtQualification[]>;
 }

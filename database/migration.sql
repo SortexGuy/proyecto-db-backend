@@ -3,16 +3,17 @@ PRAGMA foreign_keys = ON;
 -- User tables
 CREATE TABLE IF NOT EXISTS user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  username TEXT NOT NULL,
+  username TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
   role TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS teacher (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  ic TEXT NOT NULL,
+  ic TEXT NOT NULL UNIQUE,
   name TEXT NOT NULL,
   last_name TEXT NOT NULL,
+  contact TEXT,
 
   user_id INTEGER NOT NULL,
 
@@ -21,9 +22,10 @@ CREATE TABLE IF NOT EXISTS teacher (
 
 CREATE TABLE IF NOT EXISTS representative (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  ic TEXT NOT NULL,
+  ic TEXT NOT NULL UNIQUE,
   name TEXT NOT NULL,
   last_name TEXT NOT NULL,
+  contact TEXT,
 
   user_id INTEGER NOT NULL,
 
@@ -32,9 +34,10 @@ CREATE TABLE IF NOT EXISTS representative (
 
 CREATE TABLE IF NOT EXISTS coordinator (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  ic TEXT NOT NULL,
+  ic TEXT NOT NULL UNIQUE,
   name TEXT NOT NULL,
   last_name TEXT NOT NULL,
+  contact TEXT,
   entry_date DATE NOT NULL,
   withdraw_date DATE,
 
@@ -46,7 +49,7 @@ CREATE TABLE IF NOT EXISTS coordinator (
 -- Student tables
 CREATE TABLE IF NOT EXISTS student (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  ic TEXT NOT NULL,
+  ic TEXT NOT NULL UNIQUE,
   name TEXT NOT NULL,
   last_name TEXT NOT NULL,
   current_year INTEGER NOT NULL,

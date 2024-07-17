@@ -56,14 +56,15 @@ export class BunCoordinatorRepository implements CoordinatorRepository {
 			});
 
 			const query = this.db.query(`
-				INSERT INTO coordinator (ic, name, last_name, entry_date, withdraw_date, user_id)
-					VALUES ($ic, $name, $last_name, $entry_date, $withdraw_date,
+				INSERT INTO coordinator (ic, name, last_name, contact, entry_date, withdraw_date, user_id)
+					VALUES ($ic, $name, $last_name, $contact, $entry_date, $withdraw_date,
 						(SELECT id FROM user WHERE username = $username));
 			`);
 			query.run({
 				$ic: coordinator.ic,
 				$name: coordinator.name,
 				$last_name: coordinator.last_name,
+				$contact: coordinator.contact,
 				$entry_date: coordinator.entry_date,
 				$withdraw_date: coordinator.withdraw_date || null,
 				$username: coordinator.username,

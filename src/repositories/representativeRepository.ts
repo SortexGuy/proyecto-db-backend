@@ -94,14 +94,15 @@ export class BunRepresentativeRepository implements RepresentativeRepository {
 			});
 
 			const query = this.db.query(`
-				INSERT INTO representative (ic, name, last_name, user_id)
-					VALUES ($ic, $name, $last_name,
+				INSERT INTO representative (ic, name, last_name, contact, user_id)
+					VALUES ($ic, $name, $last_name, $contact,
 						(SELECT id FROM user WHERE username = $username));
 			`);
 			query.run({
 				$ic: representative.ic,
 				$name: representative.name,
 				$last_name: representative.last_name,
+				$contact: representative.contact,
 				$username: representative.username,
 			});
 		} catch (err) {

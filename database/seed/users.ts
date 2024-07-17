@@ -6,6 +6,7 @@ type UserToInsert = {
 	$ic: string;
 	$name: string;
 	$last_name: string;
+	$contact: string;
 } & (
 	| {
 			$role: "teacher";
@@ -30,15 +31,18 @@ export async function insertUsersCallback(db: Database): Promise<{
 	);
 
 	const insertCoordinator = db.prepare(
-		`INSERT INTO coordinator (user_id, ic, name, last_name, entry_date, withdraw_date) VALUES ($user_id, $ic, $name, $last_name, $entry_date, $withdraw_date);`,
+		`INSERT INTO coordinator (user_id, ic, name, last_name, contact, entry_date, withdraw_date)
+			VALUES ($user_id, $ic, $name, $last_name, $contact, $entry_date, $withdraw_date);`,
 	);
 
 	const insertRepresentative = db.prepare(
-		`INSERT INTO representative (user_id, ic, name, last_name) VALUES ($user_id, $ic, $name, $last_name);`,
+		`INSERT INTO representative (user_id, ic, name, last_name, contact)
+			VALUES ($user_id, $ic, $name, $last_name, $contact);`,
 	);
 
 	const insertTeacher = db.prepare(
-		`INSERT INTO teacher (user_id, ic, name, last_name) VALUES ($user_id, $ic, $name, $last_name);`,
+		`INSERT INTO teacher (user_id, ic, name, last_name, contact)
+			VALUES ($user_id, $ic, $name, $last_name, $contact);`,
 	);
 
 	const insertUserTransaction = db.transaction((users) => {
@@ -61,6 +65,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 					$ic: user.$ic,
 					$name: user.$name,
 					$last_name: user.$last_name,
+					$contact: user.$contact,
 					$entry_date: user.$entry_date,
 					$withdraw_date: user.$withdraw_date,
 				});
@@ -70,6 +75,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 					$ic: user.$ic,
 					$name: user.$name,
 					$last_name: user.$last_name,
+					$contact: user.$contact,
 				});
 			} else if (user.$role === "teacher") {
 				insertTeacher.run({
@@ -77,6 +83,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 					$ic: user.$ic,
 					$name: user.$name,
 					$last_name: user.$last_name,
+					$contact: user.$contact,
 				});
 			}
 		}
@@ -91,6 +98,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v18010225",
 			$name: "Thor",
 			$last_name: "Braunston",
+			$contact: "0426-4485319",
 			$role: "coordinator",
 			$entry_date: "5/6/2021",
 			$withdraw_date: null,
@@ -101,6 +109,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v13959292",
 			$name: "Engracia",
 			$last_name: "Coghlin",
+			$contact: "0416-4348939",
 			$role: "coordinator",
 			$entry_date: "2/18/2019",
 			$withdraw_date: null,
@@ -111,6 +120,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v18431760",
 			$name: "Tobias",
 			$last_name: "Mc Kellen",
+			$contact: "0426-4587329",
 			$role: "coordinator",
 			$entry_date: "3/24/2022",
 			$withdraw_date: "9/3/2023",
@@ -121,6 +131,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v11707054",
 			$name: "Nell",
 			$last_name: "Caldaro",
+			$contact: "0426-2495385",
 			$role: "coordinator",
 			$entry_date: "11/26/2020",
 			$withdraw_date: null,
@@ -131,6 +142,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v19938161",
 			$name: "Saundra",
 			$last_name: "Blades",
+			$contact: "0426-4888613",
 			$role: "coordinator",
 			$entry_date: "8/17/2016",
 			$withdraw_date: "12/12/2023",
@@ -141,6 +153,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v13973706",
 			$name: "Murielle",
 			$last_name: "Scuse",
+			$contact: "0426-4995459",
 			$role: "coordinator",
 			$entry_date: "9/17/2021",
 			$withdraw_date: null,
@@ -154,6 +167,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v25198522",
 			$name: "Rikki",
 			$last_name: "Rackstraw",
+			$contact: "0426-4488339",
 			$role: "teacher",
 		},
 		{
@@ -162,6 +176,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v25949689",
 			$name: "Cayla",
 			$last_name: "Stonehewer",
+			$contact: "0426-4985413",
 			$role: "teacher",
 		},
 		{
@@ -170,6 +185,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v25030179",
 			$name: "Katinka",
 			$last_name: "Kemet",
+			$contact: "0426-9085364",
 			$role: "teacher",
 		},
 		{
@@ -178,6 +194,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v25643520",
 			$name: "Blancha",
 			$last_name: "Corzor",
+			$contact: "0426-0435809",
 			$role: "teacher",
 		},
 		{
@@ -186,6 +203,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v25599739",
 			$name: "Lida",
 			$last_name: "Livsey",
+			$contact: "0426-1405689",
 			$role: "teacher",
 		},
 		{
@@ -194,6 +212,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v25730515",
 			$name: "Monty",
 			$last_name: "Connachan",
+			$contact: "0426-8788309",
 			$role: "teacher",
 		},
 	];
@@ -204,6 +223,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v23111312",
 			$name: "Ashlie",
 			$last_name: "Downing",
+			$contact: "0416-4890309",
 			$role: "representative",
 		},
 		{
@@ -212,6 +232,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v23277486",
 			$name: "Bethany",
 			$last_name: "Feirn",
+			$contact: "0426-0430399",
 			$role: "representative",
 		},
 		{
@@ -220,6 +241,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v23352216",
 			$name: "Etty",
 			$last_name: "Stilliard",
+			$contact: "0426-8438019",
 			$role: "representative",
 		},
 		{
@@ -228,6 +250,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v23035813",
 			$name: "Marika",
 			$last_name: "Ten Broek",
+			$contact: "0426-0786339",
 			$role: "representative",
 		},
 		{
@@ -236,6 +259,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v23103350",
 			$name: "Kiele",
 			$last_name: "McCurdy",
+			$contact: "0426-3489009",
 			$role: "representative",
 		},
 		{
@@ -244,6 +268,7 @@ export async function insertUsersCallback(db: Database): Promise<{
 			$ic: "v23579305",
 			$name: "Myrah",
 			$last_name: "Chidgey",
+			$contact: "0426-1280310",
 			$role: "representative",
 		},
 	];
