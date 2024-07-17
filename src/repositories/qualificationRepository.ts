@@ -3,6 +3,7 @@ import { QualificationRepository } from "@/models/repositories/qualification";
 import {
 	NewQualification,
 	Qualification,
+	SearchQualification,
 	UpdatedQualification,
 	qualificationSchema,
 } from "@/models/qualification";
@@ -98,6 +99,99 @@ export class BunQualificationRepository implements QualificationRepository {
 		} catch (err) {
 			console.error(err);
 			throw new HTTPException(500, { message: "Internal Server Error" });
+		}
+	}
+
+	async searchQualification(
+		qualification: SearchQualification,
+	): Promise<ExtQualification[]> {
+		let queryStr = `SELECT
+				  q.id, q.value, q.lapse,
+				  charge.section,
+				  p.start_date, p.end_date,
+				  c.name AS course_name, c.year AS course_year, 
+				  teacher.user_id AS teacher_id
+				FROM qualification AS q
+					INNER JOIN charge ON q.charge_id = charge.id
+					INNER JOIN teacher ON charge.teacher_id = teacher.id
+					INNER JOIN period AS p ON charge.period_id = p.id
+					INNER JOIN course AS c ON charge.course_id = c.id
+				`;
+		let params: any = {};
+		if (Object.keys(qualification).length > 0) {
+			queryStr += `WHERE   `;
+			const qKeys = ["value", "lapse"];
+			qKeys.forEach((key) => {
+				if (qualification.hasOwnProperty(key)) {
+					queryStr += ` q.${key} = $${key} AND`;
+					params[`$${key}`] = qualification[key as keyof SearchQualification];
+				}
+			});
+			if (qualification.hasOwnProperty("section")) {
+				queryStr += ` charge.section = $section AND`;
+				params[`$section`] = qualification.section;
+			}
+			const pKeys = ["start_date", "end_date"];
+			pKeys.forEach((key) => {
+				if (qualification.hasOwnProperty(key)) {
+					queryStr += ` p.${key} = $${key} AND`;
+					params[`$${key}`] = qualification[key as keyof SearchQualification];
+				}
+			});
+			const cKeys = ["course_year", "course_name"];
+			const cRealKeys = ["year", "name"];
+			cKeys.forEach((key, i) => {
+				if (qualification.hasOwnProperty(key)) {
+					console.log(key);
+					queryStr += ` c.${cRealKeys[i]} = $${key} AND`;
+					params[`$${key}`] = qualification[key as keyof SearchQualification];
+				}
+			});
+			if (qualification.hasOwnProperty("teacher_id")) {
+				queryStr += ` teacher.user_id = $teacher_id AND`;
+			}
+			queryStr = queryStr.slice(0, -3) + `;`;
+		}
+		console.log(queryStr);
+		try {
+			const query = this.db.query(queryStr);
+			const result = query.all(params);
+
+			console.log(result);
+			return extQualificationSchema.array().parse(result);
+		} catch (err) {
+			console.error(err);
+			throw new HTTPException(500, { message: "Internal Server Error" });
+		}
+	}
+
+	async getStudentFinalGrades(ic: string): Promise<ExtQualification[]> {
+		try {
+			const query = this.db.query(`
+				SELECT
+				  q.id, q.value, q.lapse,
+				  charge.section,
+				  p.start_date, p.end_date,
+				  c.name AS course_name, c.year AS course_year, 
+				  teacher.user_id AS teacher_id
+				FROM qualification AS q
+					INNER JOIN student AS st ON q.student_id = st.id
+					INNER JOIN charge ON q.charge_id = charge.id
+					INNER JOIN period AS p ON charge.period_id = p.id
+					INNER JOIN course AS c ON charge.course_id = c.id
+					INNER JOIN teacher ON charge.teacher_id = teacher.id
+				WHERE st.ic = $ic;
+			`);
+
+			const result = query.all({
+				$ic: ic,
+			});
+
+			console.log(result);
+			return extQualificationSchema.array().parse(result);
+		} catch (err) {
+			console.error(err);
+			return [];
 		}
 	}
 }
