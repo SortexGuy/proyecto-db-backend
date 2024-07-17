@@ -16,7 +16,6 @@ qualification.get(
 	zValidator("query", searchQualificationSchema),
 	async (c) => {
 		const searchQualification = c.req.valid("query");
-		console.log(searchQualification);
 
 		const foundQualification =
 			await qualificationRepository.searchQualification(searchQualification);
