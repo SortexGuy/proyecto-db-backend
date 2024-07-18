@@ -1,25 +1,28 @@
-To install dependencies:
+Instalar dependencias:
+
 ```sh
 bun install
 ```
 
-To initialize the database:
+Iniciar base de datos:
+
 ```sh
 bun run migrate
 ```
 
-To load some testing data to the db:
+Cargar datos iniciales en la base de datos:
+
 ```sh
 bun run seed
 ```
 
-You have to create a `.env` file with the content
-of `.env.example` and fill in the values
-with random characters to test.
+Se debe crear el archivo `.env` con el contenido de
+`.env.example` y agregar los valores necesarios.
 
-To run the dev server:
+Iniciar el servidor de desarrollo:
+
 ```sh
 bun run dev
 ```
 
-Server starts on [localhost:3000](http://localhost:3000)
+Servidor iniciado en [localhost:3000](http://localhost:3000)
