@@ -161,7 +161,6 @@ export class BunQualificationRepository implements QualificationRepository {
 			const query = this.db.query(queryStr);
 			const result = query.all(params);
 
-			console.log(result);
 			return extQualificationSchema.array().parse(result);
 		} catch (err) {
 			console.error(err);
