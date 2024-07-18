@@ -13,6 +13,16 @@ user.get("/me", async (c) => {
 	return c.json(user);
 });
 
+user.get("/un/:username", async (c) => {
+	const username = c.req.param("username");
+	const foundUser = await userRepository.getUserByUsername(username);
+	if (!foundUser) {
+		throw new HTTPException(404, { message: "User not found" });
+	}
+
+	return c.json(foundUser);
+});
+
 user.get("/:id", async (c) => {
 	const id = c.req.param("id");
 	const foundUser = await userRepository.getUserById(id);
