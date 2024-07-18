@@ -39,8 +39,8 @@ qualification.post(
 	"/",
 	zValidator("json", newQualificationSchema),
 	async (c) => {
-		await authValidator(userRepository, c, "coordinator");
 		const studentData = c.req.valid("json");
+		console.log(studentData);
 
 		qualificationRepository.aggregateQualification(studentData);
 		return c.json({ message: "student created successfully" });
