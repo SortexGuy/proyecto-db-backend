@@ -24,7 +24,6 @@ user.get("/:id", async (c) => {
 });
 
 user.put("/:id", zValidator("json", updatedUserSchema), async (c) => {
-	await authValidator(userRepository, c, "coordinator");
 	const id = c.req.param("id");
 	const userData = c.req.valid("json");
 
