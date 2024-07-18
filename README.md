@@ -13,6 +13,10 @@ To load some testing data to the db:
 bun run seed
 ```
 
+You have to create a `.env` file with the content
+of `.env.example` and fill in the values
+with random characters to test.
+
 To run the dev server:
 ```sh
 bun run dev

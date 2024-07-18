@@ -55,6 +55,16 @@ student.get("/:ic/info", async (c) => {
 	return c.json(foundStudent);
 });
 
+student.get("/byic/:ic", async (c) => {
+	const ic = c.req.param("ic");
+	const foundStudent = await studentRepository.getStudentByIc(ic);
+	if (!foundStudent) {
+		throw new HTTPException(404, { message: "Student not found" });
+	}
+
+	return c.json(foundStudent);
+});
+
 student.get("/:id", async (c) => {
 	const id = c.req.param("id");
 	const foundStudent = await studentRepository.getStudentById(id);
