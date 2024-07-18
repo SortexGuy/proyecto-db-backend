@@ -8,7 +8,6 @@ import {
 import { RepresentativeRepository } from "@/models/repositories/representative";
 import { Student, studentSchema } from "@/models/student";
 import { HTTPException } from "hono/http-exception";
-import { NewRepStudent } from "@/models/repStudent";
 import { z } from "zod";
 
 export class BunRepresentativeRepository implements RepresentativeRepository {
